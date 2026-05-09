@@ -1,0 +1,13 @@
+{
+  "name": "SQUAD",
+  "short_name": "SQUAD",
+  "icons": [
+    { "src": "/assets/favicon-16.png", "sizes": "16x16", "type": "image/png" },
+    { "src": "/assets/favicon-32.png", "sizes": "32x32", "type": "image/png" },
+    { "src": "/assets/apple-touch-icon.png", "sizes": "180x180", "type": "image/png" }
+  ],
+  "theme_color": "#F5F2E9",
+  "background_color": "#F5F2E9",
+  "display": "browser",
+  "start_url": "/"
+}
