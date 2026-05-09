@@ -31,6 +31,14 @@ describe('isHoneypotTripped', () => {
     expect(isHoneypotTripped('bot was here')).toBe(true);
     expect(isHoneypotTripped(' ')).toBe(true);
   });
+
+  it('returns true for non-string values (locks in malformed-input rejection)', () => {
+    expect(isHoneypotTripped(42)).toBe(true);
+    expect(isHoneypotTripped([])).toBe(true);
+    expect(isHoneypotTripped({})).toBe(true);
+    expect(isHoneypotTripped(false)).toBe(true);
+    expect(isHoneypotTripped(true)).toBe(true);
+  });
 });
 
 describe('parseSubscribeBody', () => {
