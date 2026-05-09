@@ -1,0 +1,17 @@
+# Dependencies
+node_modules/
+
+# Wrangler / Pages local dev
+.wrangler/
+.dev.vars
+.env.local
+.env.*.local
+
+# OS / editor
+.DS_Store
+.vscode/
+.idea/
+
+# Test/build artifacts
+coverage/
+dist/
