@@ -1,0 +1,4 @@
+# Copy to .dev.vars (gitignored) and fill in real values.
+BUTTONDOWN_API_KEY=
+TURNSTILE_SITE_KEY=
+TURNSTILE_SECRET=
