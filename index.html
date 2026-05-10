@@ -75,8 +75,8 @@
     --page-text:var(--steel-800);
     --hero-text:var(--steel-800);
     --grid-line:rgba(29,52,68,0.085);
-    --sweep-strong:rgba(238,71,33,0.12);
-    --sweep-soft:rgba(238,71,33,0.05);
+    --sweep-strong:rgba(238,71,33,0.06);
+    --sweep-soft:rgba(238,71,33,0.025);
     --sweep-blend:multiply;
     --mark-opacity:0.055;
     --control-text:var(--steel-500);
@@ -98,9 +98,6 @@
       var(--ticker-bg) 0%, var(--ticker-bg) 12%,
       transparent 18%, transparent 82%,
       var(--ticker-bg) 88%, var(--ticker-bg) 100%);
-    --board-glow-strong:rgba(238,71,33,0.18);
-    --board-glow-mid:rgba(19,34,44,0.12);
-    --board-glow-soft:rgba(242,107,73,0.11);
   }
 
   html[data-theme="dark"]{
@@ -109,8 +106,8 @@
     --page-text:var(--linen-200);
     --hero-text:var(--linen-200);
     --grid-line:rgba(190,196,206,0.05);
-    --sweep-strong:rgba(238,71,33,0.10);
-    --sweep-soft:rgba(238,71,33,0.04);
+    --sweep-strong:rgba(238,71,33,0.05);
+    --sweep-soft:rgba(238,71,33,0.02);
     --sweep-blend:screen;
     --mark-opacity:0.045;
     --control-text:var(--steel-300);
@@ -132,9 +129,6 @@
       var(--ticker-bg) 0%, var(--ticker-bg) 12%,
       transparent 18%, transparent 82%,
       var(--ticker-bg) 88%, var(--ticker-bg) 100%);
-    --board-glow-strong:rgba(238,71,33,0.22);
-    --board-glow-mid:rgba(19,34,44,0.18);
-    --board-glow-soft:rgba(242,107,73,0.10);
   }
 
   *{box-sizing:border-box;margin:0;padding:0}
@@ -255,7 +249,12 @@
     display:flex;flex-direction:column;
     gap:clamp(var(--s3), 3.1vh, var(--s6));
     justify-content:space-between;
-    min-height:100%;
+    /* flex:1 0 auto makes the inner fill the hero reliably across browsers.
+       min-height:100% does not resolve when the parent's height is auto
+       (which it is, because .hero is sized by flex grow). Without this,
+       the inner shrinks to content and space-between has no slack to
+       distribute, which leaves dead space below the signup on phones. */
+    flex:1 0 auto;
     position:relative}
 
   @media (min-width: 1181px) and (max-width: 1699px){
@@ -400,18 +399,6 @@
     position:relative;
     isolation:isolate;
   }
-  .gameboard::before{
-    content:"";
-    position:absolute;
-    inset:-28px -34px -26px -28px;
-    border-radius:28px;
-    background:
-      radial-gradient(circle at 78% 18%, var(--board-glow-strong), transparent 26%),
-      linear-gradient(135deg, var(--board-glow-soft), var(--board-glow-mid) 48%, var(--board-glow-soft));
-    opacity:0.8;
-    filter:blur(0.2px);
-    z-index:-1;
-  }
   .gameboard-head{
     order:1;
     display:flex;
@@ -456,65 +443,6 @@
     background:rgba(19,34,44,0.06);
     border-color:rgba(29,52,68,0.16);
     color:var(--steel-700);
-  }
-  .game-message{
-    --message-bg:oklch(0.76 0.12 35 / 0.13);
-    --message-border:oklch(0.68 0.15 35 / 0.28);
-    order:2;
-    display:grid;
-    gap:5px;
-    height:clamp(96px, 8.8vw, 132px);
-    padding:10px 12px 11px;
-    border:1px solid var(--message-border);
-    border-radius:7px;
-    background:
-      radial-gradient(circle at 100% 0%, oklch(0.72 0.16 35 / 0.20), transparent 34%),
-      linear-gradient(135deg, var(--message-bg), rgba(235,231,219,0.025));
-    color:var(--linen);
-    overflow:hidden;
-    contain:layout paint;
-  }
-  html[data-theme="light"] .game-message{
-    color:var(--steel-800);
-    background:
-      radial-gradient(circle at 100% 0%, oklch(0.72 0.16 35 / 0.20), transparent 34%),
-      linear-gradient(135deg, var(--message-bg), rgba(250,248,241,0.72));
-  }
-  .game-message-kicker{
-    font-family:var(--font-mono);
-    font-size:9px;
-    font-weight:700;
-    line-height:1.25;
-    letter-spacing:var(--track-label);
-    color:var(--terra);
-    text-transform:uppercase;
-  }
-  .game-message-line{
-    display:flex;
-    flex-wrap:wrap;
-    align-items:baseline;
-    gap:0.22em;
-    font-family:var(--font-sans);
-    font-size:clamp(25px, 2.75vw, 42px);
-    font-weight:900;
-    line-height:0.9;
-    letter-spacing:-0.04em;
-    text-transform:uppercase;
-  }
-  .game-message-line span{display:inline-block}
-  .game-message-line span:empty{display:none}
-  .game-message-accent{
-    color:var(--terra);
-    text-shadow:0 1px 0 rgba(12,24,32,0.12);
-  }
-  .gameboard.is-changing .game-message-kicker{
-    animation:message-kicker-in 420ms var(--ease-quint);
-  }
-  .gameboard.is-changing .game-message-line{
-    animation:message-line-in 540ms var(--ease-quint);
-  }
-  .gameboard.is-changing .game-message-accent{
-    animation:message-accent-hit 540ms var(--ease-quint);
   }
   .game-lock{
     display:inline-flex;
@@ -818,20 +746,6 @@
     0% { opacity:0.42; transform:translateY(4px); }
     100% { opacity:1; transform:translateY(0); }
   }
-  @keyframes message-kicker-in{
-    0% { opacity:0; transform:translateY(-6px); }
-    100% { opacity:1; transform:translateY(0); }
-  }
-  @keyframes message-line-in{
-    0% { opacity:0; transform:translateY(10px) scale(0.98); }
-    55% { opacity:1; transform:translateY(0) scale(1.015); }
-    100% { opacity:1; transform:translateY(0) scale(1); }
-  }
-  @keyframes message-accent-hit{
-    0% { color:var(--steel-800); transform:translateY(6px); }
-    52% { color:var(--terra); transform:translateY(0); }
-    100% { color:var(--terra); transform:translateY(0); }
-  }
   .gameboard.is-changing .game-sport,
   .gameboard.is-changing .game-lock,
   .gameboard.is-changing .game-stat-value,
@@ -967,12 +881,6 @@
       width:min(100%, 390px);
       gap:10px;
     }
-    .game-message{
-      height:112px;
-    }
-    .game-message-line{
-      font-size:clamp(28px, 2.55vw, 37px);
-    }
     .court{
       min-height:clamp(160px, 20vh, 188px);
     }
@@ -1057,10 +965,6 @@
       gap:8px;
       margin-top:clamp(26px, 5vh, var(--s6));
     }
-    .gameboard::before{
-      inset:-22px -22px -20px -22px;
-      border-radius:24px;
-    }
     .gameboard-head{
       padding-bottom:8px;
     }
@@ -1073,9 +977,6 @@
     .game-sport{
       font-size:8px;
       padding:3px 6px;
-    }
-    .game-message{
-      height:78px;
     }
     .court{
       min-height:clamp(138px, 19.5vh, 178px);
@@ -1160,10 +1061,6 @@
       margin:0;
       gap:10px;
     }
-    .gameboard::before{
-      inset:-22px -22px -20px -22px;
-      border-radius:24px;
-    }
     .court{
       min-height:clamp(210px, 22vh, 284px);
     }
@@ -1178,9 +1075,8 @@
     .brand-line{display:flex;flex-direction:column;align-items:flex-start;max-width:680px}
     .gameboard{width:100%;max-width:380px}
     .court{order:2}
-    .game-message{order:3}
-    .gameboard-data{order:4}
-    .game-feed{order:5}
+    .gameboard-data{order:3}
+    .game-feed{order:4}
   }
 
   @media (min-width: 481px) and (max-width: 999px){
@@ -1270,10 +1166,6 @@
       max-width:680px;
       gap:6px;
     }
-    .gameboard::before{
-      inset:-14px -12px -14px -12px;
-      border-radius:18px;
-    }
     .gameboard-head{
       gap:var(--s1);
       padding-bottom:6px;
@@ -1283,17 +1175,6 @@
     .game-stat-label,
     .game-feed{
       font-size:8px;
-    }
-    .game-message{
-      height:86px;
-      padding:8px 9px;
-      gap:4px;
-    }
-    .game-message-kicker{
-      font-size:8px;
-    }
-    .game-message-line{
-      font-size:clamp(24px, 5.4vw, 30px);
     }
     .game-sport{
       font-size:7px;
@@ -1474,10 +1355,6 @@
       gap:10px;
       margin:0;
     }
-    .gameboard::before{
-      inset:-22px -22px -20px -22px;
-      border-radius:24px;
-    }
     .gameboard-head{
       padding-bottom:9px;
       gap:var(--s2);
@@ -1487,13 +1364,6 @@
     .game-stat-label,
     .game-feed{
       font-size:9px;
-    }
-    .game-message{
-      height:96px;
-      padding:10px 12px 11px;
-    }
-    .game-message-line{
-      font-size:clamp(31px, 4.2vw, 40px);
     }
     .game-sport{
       font-size:8px;
@@ -1606,14 +1476,10 @@
     html[lang="ru"] .brand-line h1{font-size:clamp(36px, 4.7vw, 52px);line-height:0.9}
     html[lang="ru"] .brand-line h1 [data-i18n="heroLine1"]{margin-bottom:0.16em}
     .gameboard{max-width:280px;gap:5px}
-    .gameboard::before{inset:-14px -14px -12px -14px;border-radius:20px}
     .gameboard-head{padding-bottom:5px}
     .game-kicker,.game-lock,.game-stat-label,.game-feed{font-size:7px}
     .game-lock{gap:5px}
     .game-lock-mark{width:14px}
-    .game-message{height:68px;padding:6px 8px;gap:3px}
-    .game-message-kicker{font-size:7px}
-    .game-message-line{font-size:clamp(17px, 2.9vw, 19px);line-height:0.94}
     .game-sport{font-size:7px;padding:3px 5px}
     .court{min-height:92px}
     .court::before{inset:10px}
@@ -1652,7 +1518,7 @@
     .lang-options{min-width:60px}
     .lang-option{height:28px;font-size:10px}
     .hero{justify-content:flex-start;padding:12px clamp(18px, 5vw, var(--s3)) 8px}
-    .hero-inner{height:auto;gap:10px}
+    .hero-inner{gap:10px}
     .flip-shell{gap:4px;margin-top:18px}
     .flip-kicker{font-size:8px;letter-spacing:0.18em}
     .flip-timer{gap:2px;max-width:100%}
@@ -1665,13 +1531,8 @@
     html[lang="ru"] .brand-line h1 [data-i18n="heroLine1"]{margin-bottom:0.14em}
     html[lang="az"] .brand-line h1{font-size:clamp(46px, 14vw, 58px)}
     .gameboard{max-width:100%;gap:6px}
-    .gameboard::before{inset:-6px -10px -8px -10px;border-radius:18px}
     .gameboard-head{gap:var(--s1);padding-bottom:6px}
     .game-kicker,.game-lock,.game-stat-label,.game-feed{font-size:8px}
-    .game-message{padding:8px 10px;gap:4px}
-    .game-message{height:90px}
-    .game-message-kicker{font-size:7px}
-    .game-message-line{font-size:clamp(24px, 7.4vw, 31px)}
     .game-sport{font-size:7px;padding:3px 5px}
     .court{min-height:clamp(152px, 22vh, 178px)}
     .court::before{inset:12px}
@@ -1718,7 +1579,6 @@
     .flip-card.is-space{width:5px}
     .brand-line h1{font-size:clamp(44px, 14.6vw, 52px)}
     html[lang="ru"] .brand-line h1{font-size:clamp(29px, 9.4vw, 34px)}
-    .game-message-line{font-size:clamp(22px, 7.1vw, 27px)}
     .court{min-height:148px}
     .signup{margin-top:10px}
   }
@@ -1733,8 +1593,6 @@
     html[lang="ru"] .brand-line h1{font-size:clamp(30px, 10vw, 38px);line-height:0.92}
     .gameboard{max-width:280px;gap:5px}
     .court{min-height:104px}
-    .game-message{height:68px;padding:6px 8px}
-    .game-message-line{font-size:clamp(20px, 6.7vw, 25px)}
     .gameboard-data{gap:5px}
     .game-stat{padding:6px 7px}
     .game-stat-value{font-size:16px}
@@ -1761,9 +1619,6 @@
     html[lang="ru"] .brand-line h1{font-size:clamp(48px, 8vw, 60px)}
     html[lang="az"] .brand-line h1{font-size:clamp(60px, 9.8vw, 72px)}
     .gameboard{max-width:100%;gap:8px}
-    .gameboard::before{inset:-18px -18px -16px -18px;border-radius:22px}
-    .game-message{height:104px;padding:10px 12px}
-    .game-message-line{font-size:clamp(28px, 4.8vw, 35px)}
     .court{min-height:clamp(250px, 29vh, 330px)}
     .gameboard-data{gap:8px}
     .game-stat{padding:9px 10px}
@@ -1794,9 +1649,6 @@
     html[lang="ru"] .brand-line h1{font-size:clamp(48px, 7.2vw, 58px)}
     html[lang="az"] .brand-line h1{font-size:clamp(60px, 9vw, 72px)}
     .gameboard{gap:8px}
-    .gameboard::before{inset:-18px -18px -16px -18px}
-    .game-message{height:88px}
-    .game-message-line{font-size:clamp(27px, 3.6vw, 34px)}
     .court{min-height:clamp(210px, 23vh, 246px)}
     .game-stat{padding:8px 10px}
     .game-stat-value{font-size:clamp(20px, 2.7vw, 26px)}
@@ -1826,9 +1678,6 @@
     html[lang="ru"] .brand-line h1{font-size:clamp(42px, 7.5vw, 52px)}
     html[lang="az"] .brand-line h1{font-size:clamp(52px, 9.4vw, 62px)}
     .gameboard{gap:6px}
-    .gameboard::before{inset:-14px -14px -12px -14px}
-    .game-message{height:86px;padding:8px 10px}
-    .game-message-line{font-size:clamp(24px, 4.5vw, 30px)}
     .court{min-height:clamp(180px, 23vh, 215px)}
     .game-stat{padding:7px 9px}
     .game-stat-value{font-size:clamp(18px, 3.3vw, 24px)}
@@ -1846,8 +1695,6 @@
     .brand-line h1{font-size:clamp(56px, 8.6vw, 68px)}
     html[lang="ru"] .brand-line h1{font-size:clamp(42px, 6.7vw, 52px)}
     html[lang="az"] .brand-line h1{font-size:clamp(54px, 8vw, 64px)}
-    .game-message{height:82px}
-    .game-message-line{font-size:clamp(24px, 3.4vw, 30px)}
     .court{min-height:clamp(174px, 20vh, 190px)}
     .signup{margin-top:14px}
     .signup-help{display:none}
@@ -1932,14 +1779,6 @@
               <span class="game-sport" id="gameSport">5V5 FOOTBALL</span>
             </div>
             <span class="game-lock"><span class="game-lock-mark" aria-hidden="true"></span><span id="gameStatus" data-i18n="gameStatus">GAME LOCKED</span></span>
-          </div>
-          <div class="game-message" id="gameMessage">
-            <div class="game-message-kicker" id="gameMessageKicker">One place, every roster</div>
-            <div class="game-message-line" id="gameMessageLine">
-              <span id="gameMessageLead">All games.</span>
-              <span class="game-message-accent" id="gameMessageAccent">One app.</span>
-              <span id="gameMessageTail"></span>
-            </div>
           </div>
           <div class="court" id="gameCourt" data-sport="football" aria-hidden="true">
             <span class="court-circle"></span>
@@ -2110,10 +1949,6 @@
         statTwoLabel: 'PITCH',
         venue: 'PITCH-A',
         feed: 'Shared invite fills the game.',
-        messageKicker: 'One place, every roster',
-        messageLead: 'All games.',
-        messageAccent: 'One app.',
-        messageTail: '',
         hot: [1, 4],
         players: [[19,22,.78],[28,56,1],[38,34,.82],[49,64,.78],[58,28,1],[68,54,.78],[78,22,.74],[84,68,.72]]
       },
@@ -2129,10 +1964,6 @@
         statTwoLabel: 'COURT',
         venue: 'BOOKED',
         feed: 'Two joins close the roster gap.',
-        messageKicker: 'Short two? Fill fast',
-        messageLead: 'Need two?',
-        messageAccent: 'SQUAD fills it.',
-        messageTail: '',
         hot: [0, 4],
         players: [[17,50,.86],[28,28,.9],[35,68,.78],[48,48,.74],[57,30,1],[67,63,.8],[77,42,.9],[84,55,.74]]
       },
@@ -2148,10 +1979,6 @@
         statTwoLabel: 'COURT',
         venue: 'READY',
         feed: 'Backup players are already queued.',
-        messageKicker: 'Backup players wait',
-        messageLead: 'Court ready.',
-        messageAccent: 'Roster ready.',
-        messageTail: '',
         hot: [4, 5],
         players: [[27,28,.92],[27,72,.92],[73,28,.92],[73,72,.92],[50,18,.66],[50,82,.66],[15,50,.58],[85,50,.58]]
       },
@@ -2167,10 +1994,6 @@
         statTwoLabel: 'HALL',
         venue: 'READY',
         feed: 'Roster, venue, and time are set.',
-        messageKicker: 'No more loose plans',
-        messageLead: 'Book it.',
-        messageAccent: 'Fill it.',
-        messageTail: 'Play it.',
         hot: [2, 5],
         players: [[22,28,.86],[22,50,.86],[22,72,.86],[78,28,.86],[78,50,.86],[78,72,.86],[50,32,.64],[50,68,.64]]
       }
@@ -2188,10 +2011,6 @@
         statTwoLabel: 'ПОЛЕ',
         venue: 'ПОЛЕ-A',
         feed: 'Ссылка собирает состав.',
-        messageKicker: 'Все игры в одном месте',
-        messageLead: 'Все игры.',
-        messageAccent: 'Один SQUAD.',
-        messageTail: '',
         hot: [1, 4],
         players: [[19,22,.78],[28,56,1],[38,34,.82],[49,64,.78],[58,28,1],[68,54,.78],[78,22,.74],[84,68,.72]]
       },
@@ -2207,10 +2026,6 @@
         statTwoLabel: 'КОРТ',
         venue: 'БРОНЬ',
         feed: 'Еще двое закрывают состав.',
-        messageKicker: 'Не хватает двоих?',
-        messageLead: 'Нужны двое?',
-        messageAccent: 'SQUAD доберет.',
-        messageTail: '',
         hot: [0, 4],
         players: [[17,50,.86],[28,28,.9],[35,68,.78],[48,48,.74],[57,30,1],[67,63,.8],[77,42,.9],[84,55,.74]]
       },
@@ -2226,10 +2041,6 @@
         statTwoLabel: 'КОРТ',
         venue: 'ГОТОВ',
         feed: 'Замены уже в очереди.',
-        messageKicker: 'Замены уже ждут',
-        messageLead: 'Корт готов.',
-        messageAccent: 'Состав готов.',
-        messageTail: '',
         hot: [4, 5],
         players: [[27,28,.92],[27,72,.92],[73,28,.92],[73,72,.92],[50,18,.66],[50,82,.66],[15,50,.58],[85,50,.58]]
       },
@@ -2245,10 +2056,6 @@
         statTwoLabel: 'ЗАЛ',
         venue: 'ГОТОВ',
         feed: 'Состав, зал и время зафиксированы.',
-        messageKicker: 'Планы не рассыпаются',
-        messageLead: 'Бронируй.',
-        messageAccent: 'Собирай.',
-        messageTail: 'Играй.',
         hot: [2, 5],
         players: [[22,28,.86],[22,50,.86],[22,72,.86],[78,28,.86],[78,50,.86],[78,72,.86],[50,32,.64],[50,68,.64]]
       }
@@ -2266,10 +2073,6 @@
         statTwoLabel: 'MEYDAN',
         venue: 'MEYDAN-A',
         feed: 'Paylaşım heyəti doldurur.',
-        messageKicker: 'Hər oyun bir yerdə',
-        messageLead: 'Bütün oyunlar.',
-        messageAccent: 'Bir tətbiq.',
-        messageTail: '',
         hot: [1, 4],
         players: [[19,22,.78],[28,56,1],[38,34,.82],[49,64,.78],[58,28,1],[68,54,.78],[78,22,.74],[84,68,.72]]
       },
@@ -2285,10 +2088,6 @@
         statTwoLabel: 'KORT',
         venue: 'BRON',
         feed: 'İki nəfər heyəti tamamlayır.',
-        messageKicker: 'İki nəfər azdır?',
-        messageLead: 'İki nəfər lazım?',
-        messageAccent: 'SQUAD tapır.',
-        messageTail: '',
         hot: [0, 4],
         players: [[17,50,.86],[28,28,.9],[35,68,.78],[48,48,.74],[57,30,1],[67,63,.8],[77,42,.9],[84,55,.74]]
       },
@@ -2304,10 +2103,6 @@
         statTwoLabel: 'KORT',
         venue: 'HAZIR',
         feed: 'Ehtiyat oyunçular sıradadır.',
-        messageKicker: 'Ehtiyat oyunçular hazır',
-        messageLead: 'Kort hazır.',
-        messageAccent: 'Heyət hazır.',
-        messageTail: '',
         hot: [4, 5],
         players: [[27,28,.92],[27,72,.92],[73,28,.92],[73,72,.92],[50,18,.66],[50,82,.66],[15,50,.58],[85,50,.58]]
       },
@@ -2323,10 +2118,6 @@
         statTwoLabel: 'ZAL',
         venue: 'HAZIR',
         feed: 'Heyət, məkan və vaxt hazırdır.',
-        messageKicker: 'Plan dağılmır',
-        messageLead: 'Bron et.',
-        messageAccent: 'Doldur.',
-        messageTail: 'Oyna.',
         hot: [2, 5],
         players: [[22,28,.86],[22,50,.86],[22,72,.86],[78,28,.86],[78,50,.86],[78,72,.86],[50,32,.64],[50,68,.64]]
       }
@@ -2376,11 +2167,17 @@
   const langMenu = document.getElementById('langMenu');
   const langTrigger = document.getElementById('langTrigger');
   const langCurrent = document.getElementById('langCurrent');
-  const messageLine = document.getElementById('gameMessageLine');
   const playerSlots = Array.from(document.querySelectorAll('.player-slot'));
   const THEME_KEY = 'squad-theme';
   let boardIndex = 0;
   let boardTimer = null;
+  let boardCyclePaused = false;
+  /* Hold the first gameboard frame long enough for visitors to read the H1
+     and reach the form before the cycle starts. Subsequent frames are slower
+     than the original 7.2s so the page reads as deliberate, not restless. */
+  const BOARD_HOLD_MS = 14000;
+  const BOARD_INTERVAL_MS = 9000;
+  const BOARD_PAUSE_RECHECK_MS = 2000;
 
   function applyTheme(theme, shouldPersist = false) {
     const nextTheme = theme === 'dark' ? 'dark' : 'light';
@@ -2522,13 +2319,6 @@
     setText('gameStatTwoLabel', frame.statTwoLabel);
     setText('gameVenue', frame.venue);
     setText('gameFeed', frame.feed);
-    setText('gameMessageKicker', frame.messageKicker || '');
-    setText('gameMessageLead', frame.messageLead || '');
-    setText('gameMessageAccent', frame.messageAccent || '');
-    setText('gameMessageTail', frame.messageTail || '');
-    if (messageLine) {
-      messageLine.setAttribute('aria-label', [frame.messageLead, frame.messageAccent, frame.messageTail].filter(Boolean).join(' '));
-    }
     positionPlayers(frame);
 
     if (!silent && !motionQuery.matches) {
@@ -2544,14 +2334,45 @@
     }
   }
 
+  function scheduleNextBoardFrame(delay) {
+    if (boardTimer) clearTimeout(boardTimer);
+    boardTimer = window.setTimeout(() => {
+      /* Re-check shortly if the tab is hidden, the gameboard is hovered,
+         or the signup form has focus. Reading and acting on the page wins
+         over auto-cycling. */
+      if (document.hidden || boardCyclePaused) {
+        scheduleNextBoardFrame(BOARD_PAUSE_RECHECK_MS);
+        return;
+      }
+      applyGameboardFrame(boardIndex + 1);
+      scheduleNextBoardFrame(BOARD_INTERVAL_MS);
+    }, delay);
+  }
+
   function startGameboardCycle() {
     applyGameboardFrame(boardIndex, true);
-    if (boardTimer) clearInterval(boardTimer);
+    if (boardTimer) clearTimeout(boardTimer);
     if (motionQuery.matches) return;
-    boardTimer = window.setInterval(() => {
-      if (document.hidden) return;
-      applyGameboardFrame(boardIndex + 1);
-    }, 7200);
+    scheduleNextBoardFrame(BOARD_HOLD_MS);
+  }
+
+  /* Pause the cycle while the visitor is hovering the gameboard or
+     interacting with the signup form. Both signals mean attention is on
+     the page; the rotating frames should wait their turn. */
+  if (gameboard) {
+    gameboard.addEventListener('mouseenter', () => { boardCyclePaused = true; });
+    gameboard.addEventListener('mouseleave', () => { boardCyclePaused = false; });
+    gameboard.addEventListener('focusin', () => { boardCyclePaused = true; });
+    gameboard.addEventListener('focusout', (e) => {
+      if (!gameboard.contains(e.relatedTarget)) boardCyclePaused = false;
+    });
+  }
+  const signupForm = document.getElementById('signup');
+  if (signupForm) {
+    signupForm.addEventListener('focusin', () => { boardCyclePaused = true; });
+    signupForm.addEventListener('focusout', (e) => {
+      if (!signupForm.contains(e.relatedTarget)) boardCyclePaused = false;
+    });
   }
 
   window.addEventListener('resize', () => {
