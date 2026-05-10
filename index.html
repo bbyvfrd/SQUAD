@@ -140,7 +140,7 @@
   *{box-sizing:border-box;margin:0;padding:0}
   html,body{background:var(--page-bg);color:var(--page-text);font-family:var(--font-sans);
     -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
-  body{height:100vh;height:100svh;overflow:hidden;display:flex;flex-direction:column;position:relative}
+  body{min-height:100vh;min-height:100svh;overflow-x:hidden;display:flex;flex-direction:column;position:relative}
   ::selection{background:var(--terra);color:var(--linen-100)}
 
   /* ─── Animated drift grid (the background) ───────────────── */
@@ -180,7 +180,7 @@
 
   /* ─── Top bar ───────────────────────────────────────────── */
   .topbar{display:flex;justify-content:space-between;align-items:center;
-    padding:clamp(var(--s2), 3.4vh, var(--s4)) clamp(var(--s4), 4vw, var(--s8));
+    padding:clamp(10px, 1.6vh, 18px) clamp(var(--s4), 4vw, var(--s8));
     position:relative;z-index:5;flex:0 0 auto}
   .topbar-lockup{height:32px;width:auto;display:block;flex:0 0 auto}
   .topbar-controls{display:flex;align-items:center;gap:10px;min-width:0}
@@ -248,12 +248,14 @@
   .lang-option:focus-visible{outline:2px solid var(--terra);outline-offset:1px}
 
   /* ─── Hero ──────────────────────────────────────────────── */
-  .hero{flex:1;display:flex;flex-direction:column;justify-content:center;
-    padding:clamp(var(--s2), 3vh, var(--s4)) clamp(var(--s4), 4vw, var(--s8));
+  .hero{flex:1 0 auto;display:flex;flex-direction:column;justify-content:flex-start;
+    padding:clamp(8px, 1.8vh, 20px) clamp(var(--s4), 4vw, var(--s8)) clamp(var(--s2), 2vh, var(--s3));
     position:relative;z-index:1;min-height:0}
   .hero-inner{max-width:1320px;width:100%;margin:0 auto;
     display:flex;flex-direction:column;
     gap:clamp(var(--s3), 3.1vh, var(--s6));
+    justify-content:space-between;
+    min-height:100%;
     position:relative}
 
   @media (min-width: 1181px) and (max-width: 1699px){
@@ -461,6 +463,7 @@
     order:2;
     display:grid;
     gap:5px;
+    height:clamp(96px, 8.8vw, 132px);
     padding:10px 12px 11px;
     border:1px solid var(--message-border);
     border-radius:7px;
@@ -494,10 +497,11 @@
     font-family:var(--font-sans);
     font-size:clamp(25px, 2.75vw, 42px);
     font-weight:900;
-    line-height:0.84;
+    line-height:0.9;
     letter-spacing:-0.04em;
     text-transform:uppercase;
   }
+  .game-message-line span{display:inline-block}
   .game-message-line span:empty{display:none}
   .game-message-accent{
     color:var(--terra);
@@ -807,7 +811,7 @@
   }
   @keyframes court-switch{
     0% { transform:translateY(0); filter:none; }
-    42% { transform:translateY(2px); filter:saturate(1.18); }
+    42% { transform:translateY(0); filter:saturate(1.18); }
     100% { transform:translateY(0); filter:none; }
   }
   @keyframes board-copy-pop{
@@ -921,6 +925,72 @@
     50% { box-shadow:0 0 0 6px rgba(238,71,33,0); }
   }
 
+  @media (min-width: 1181px) and (min-height: 621px) and (max-height: 950px){
+    .topbar{
+      padding-top:8px;
+      padding-bottom:8px;
+    }
+    .hero{
+      padding-top:6px;
+      padding-bottom:10px;
+    }
+    .hero-inner{
+      gap:clamp(var(--s2), 2vh, var(--s3));
+    }
+    .flip-shell{
+      gap:8px;
+    }
+    .flip-card{
+      width:clamp(42px, 4.5vw, 64px);
+      height:clamp(58px, 6.2vw, 88px);
+    }
+    .flip-card-glyph{
+      font-size:clamp(32px, 3.8vw, 50px);
+    }
+    .flip-card.is-space{
+      width:clamp(8px, 0.9vw, 14px);
+    }
+    .brand-line{
+      grid-template-columns:minmax(0, 1fr) minmax(330px, 390px);
+      column-gap:clamp(var(--s3), 4vw, var(--s7));
+    }
+    .brand-line h1{
+      font-size:clamp(64px, 8.6vw, 124px);
+    }
+    html[lang="ru"] .brand-line h1{
+      font-size:clamp(46px, 6.6vw, 86px);
+    }
+    html[lang="az"] .brand-line h1{
+      font-size:clamp(62px, 8.2vw, 118px);
+    }
+    .gameboard{
+      width:min(100%, 390px);
+      gap:10px;
+    }
+    .game-message{
+      height:112px;
+    }
+    .game-message-line{
+      font-size:clamp(28px, 2.55vw, 37px);
+    }
+    .court{
+      min-height:clamp(160px, 20vh, 188px);
+    }
+    .signup-row{
+      padding:5px;
+    }
+    .signup-input{
+      padding:12px 15px;
+    }
+    .signup-btn{
+      padding:12px 22px;
+    }
+    .signup-help{
+      margin-top:8px;
+      min-height:13px;
+    }
+  }
+
   /* ─── Reduced motion ──────────────────────────────────────── */
   @media (prefers-reduced-motion: reduce){
     .reveal{opacity:1;transform:none;animation:none}
@@ -940,11 +1010,11 @@
   /* ─── Tablet composition ─────────────────────────────────── */
   @media (min-width: 1000px) and (max-width: 1180px) and (orientation: landscape){
     .topbar{
-      padding:clamp(18px, 2.8vh, var(--s4)) clamp(var(--s5), 4.6vw, var(--s7));
+      padding:clamp(8px, 1.5vh, 14px) clamp(var(--s5), 4.6vw, var(--s7));
     }
     .hero{
       justify-content:flex-start;
-      padding:clamp(10px, 1.8vh, var(--s3)) clamp(var(--s5), 4.6vw, var(--s7)) var(--s2);
+      padding:clamp(6px, 1.4vh, 12px) clamp(var(--s5), 4.6vw, var(--s7)) var(--s2);
     }
     .hero-inner{
       height:100%;
@@ -1004,6 +1074,9 @@
       font-size:8px;
       padding:3px 6px;
     }
+    .game-message{
+      height:78px;
+    }
     .court{
       min-height:clamp(138px, 19.5vh, 178px);
     }
@@ -1035,7 +1108,7 @@
 
   @media (min-width: 761px) and (max-width: 1100px) and (orientation: portrait){
     .topbar{
-      padding:clamp(var(--s3), 3.4vh, var(--s5)) clamp(var(--s4), 5vw, var(--s7));
+      padding:clamp(var(--s2), 2.4vh, var(--s4)) clamp(var(--s4), 5vw, var(--s7));
     }
     .hero{
       justify-content:flex-start;
@@ -1212,6 +1285,7 @@
       font-size:8px;
     }
     .game-message{
+      height:86px;
       padding:8px 9px;
       gap:4px;
     }
@@ -1315,7 +1389,7 @@
 
   @media (min-width: 761px) and (max-width: 1100px) and (orientation: portrait){
     .topbar{
-      padding:clamp(24px, 3.2vh, var(--s5)) clamp(var(--s5), 6vw, var(--s8));
+      padding:clamp(var(--s2), 2.2vh, var(--s4)) clamp(var(--s5), 6vw, var(--s8));
     }
     .topbar-lockup{
       height:28px;
@@ -1415,6 +1489,7 @@
       font-size:9px;
     }
     .game-message{
+      height:96px;
       padding:10px 12px 11px;
     }
     .game-message-line{
@@ -1462,7 +1537,11 @@
       width:20px;
     }
     .signup{
+      align-self:center;
+      width:min(100%, 720px);
       max-width:min(100%, 720px);
+      margin-left:auto;
+      margin-right:auto;
       margin-top:clamp(18px, 2.6vh, 32px);
     }
     .signup-row{
@@ -1507,9 +1586,14 @@
   }
 
   @media (max-height: 620px){
-    .topbar{padding-top:10px;padding-bottom:10px}
-    .topbar-lockup{height:26px}
-    .hero{padding-top:6px;padding-bottom:10px}
+    .topbar{padding-top:6px;padding-bottom:6px}
+    .topbar-lockup{height:24px}
+    .theme-toggle{width:52px;height:28px}
+    .theme-toggle::before{width:22px}
+    html[data-theme="dark"] .theme-toggle::before{transform:translateX(24px)}
+    .theme-option svg{width:13px;height:13px}
+    .lang-trigger{height:28px;min-width:52px;font-size:10px;padding:0 9px}
+    .hero{padding-top:2px;padding-bottom:6px}
     .hero-inner{gap:10px}
     .flip-shell{gap:6px}
     .flip-kicker{font-size:10px}
@@ -1521,14 +1605,17 @@
     .brand-line h1{font-size:clamp(42px, 5.9vw, 66px);line-height:0.84}
     html[lang="ru"] .brand-line h1{font-size:clamp(36px, 4.7vw, 52px);line-height:0.9}
     html[lang="ru"] .brand-line h1 [data-i18n="heroLine1"]{margin-bottom:0.16em}
-    .gameboard{max-width:300px;gap:6px}
-    .gameboard-head{padding-bottom:6px}
-    .game-kicker,.game-lock,.game-stat-label,.game-feed{font-size:8px}
-    .game-message{padding:7px 9px;gap:4px}
-    .game-message-kicker{font-size:8px}
-    .game-message-line{font-size:clamp(21px, 3.8vw, 25px)}
+    .gameboard{max-width:280px;gap:5px}
+    .gameboard::before{inset:-14px -14px -12px -14px;border-radius:20px}
+    .gameboard-head{padding-bottom:5px}
+    .game-kicker,.game-lock,.game-stat-label,.game-feed{font-size:7px}
+    .game-lock{gap:5px}
+    .game-lock-mark{width:14px}
+    .game-message{height:68px;padding:6px 8px;gap:3px}
+    .game-message-kicker{font-size:7px}
+    .game-message-line{font-size:clamp(17px, 2.9vw, 19px);line-height:0.94}
     .game-sport{font-size:7px;padding:3px 5px}
-    .court{min-height:112px}
+    .court{min-height:92px}
     .court::before{inset:10px}
     .court::after{top:10px;bottom:10px}
     .court-goal{height:46px;width:24px}
@@ -1537,16 +1624,18 @@
     .court[data-sport="basket"] .court-goal.is-left{left:18px}
     .court[data-sport="basket"] .court-goal.is-right{right:18px}
     .court-circle{width:46px}
-    .waitlist-chip{font-size:7px;padding:5px 7px;bottom:10px;left:10px}
-    .lock-banner{top:10px;right:10px;font-size:clamp(13px, 1.1vw, 16px);padding:6px 7px}
+    .waitlist-chip{font-size:6px;padding:4px 6px;bottom:8px;left:8px}
+    .lock-banner{top:8px;right:8px;font-size:clamp(12px, 1vw, 15px);padding:5px 6px}
     .gameboard-data{gap:6px}
-    .game-stat{padding:7px 8px}
-    .game-stat-value{font-size:clamp(16px, 1.4vw, 20px)}
+    .game-stat{padding:5px 7px}
+    .game-stat-value{font-size:clamp(15px, 1.35vw, 18px)}
+    .game-feed{display:none}
     .signup-row{padding:4px;border-radius:8px}
-    .signup-input{font-size:14px;padding:10px 14px}
-    .signup-btn{font-size:12px;padding:10px 18px;border-radius:5px}
-    .signup-help{margin-top:6px;font-size:8px;line-height:1.45;min-height:12px}
-    .ticker-strip{height:34px}
+    .signup-input{font-size:14px;padding:9px 12px}
+    .signup-btn{font-size:12px;padding:9px 18px;border-radius:5px}
+    .signup-help{display:none}
+    .signup-help.is-error{display:block;margin-top:4px;font-size:7px;line-height:1.35;min-height:10px}
+    .ticker-strip{height:32px}
     .ticker-meta,.ticker-tag{font-size:9px}
     .ticker-track{font-size:9px;gap:var(--s3)}
   }
@@ -1580,6 +1669,7 @@
     .gameboard-head{gap:var(--s1);padding-bottom:6px}
     .game-kicker,.game-lock,.game-stat-label,.game-feed{font-size:8px}
     .game-message{padding:8px 10px;gap:4px}
+    .game-message{height:90px}
     .game-message-kicker{font-size:7px}
     .game-message-line{font-size:clamp(24px, 7.4vw, 31px)}
     .game-sport{font-size:7px;padding:3px 5px}
@@ -1643,7 +1733,7 @@
     html[lang="ru"] .brand-line h1{font-size:clamp(30px, 10vw, 38px);line-height:0.92}
     .gameboard{max-width:280px;gap:5px}
     .court{min-height:104px}
-    .game-message{padding:6px 8px}
+    .game-message{height:68px;padding:6px 8px}
     .game-message-line{font-size:clamp(20px, 6.7vw, 25px)}
     .gameboard-data{gap:5px}
     .game-stat{padding:6px 7px}
@@ -1652,6 +1742,128 @@
     .signup-row{gap:var(--s1)}
     .signup-input{padding:10px 12px}
     .signup-btn{padding:10px 18px}
+  }
+
+  @media (min-width: 600px) and (max-width: 760px) and (min-height: 850px){
+    .topbar{padding:14px clamp(var(--s3), 4.5vw, var(--s5)) 10px}
+    .hero{padding:10px clamp(var(--s3), 4.5vw, var(--s5)) 12px}
+    .hero-inner{height:auto;gap:16px}
+    .flip-shell{gap:7px}
+    .flip-kicker{font-size:10px}
+    .flip-card{
+      width:clamp(36px, 5.8vw, 44px);
+      height:clamp(50px, 7.8vw, 60px);
+    }
+    .flip-card-glyph{font-size:clamp(28px, 4.6vw, 36px)}
+    .flip-card.is-space{width:8px}
+    .brand-line{gap:26px}
+    .brand-line h1{font-size:clamp(64px, 10.8vw, 78px);line-height:0.82}
+    html[lang="ru"] .brand-line h1{font-size:clamp(48px, 8vw, 60px)}
+    html[lang="az"] .brand-line h1{font-size:clamp(60px, 9.8vw, 72px)}
+    .gameboard{max-width:100%;gap:8px}
+    .gameboard::before{inset:-18px -18px -16px -18px;border-radius:22px}
+    .game-message{height:104px;padding:10px 12px}
+    .game-message-line{font-size:clamp(28px, 4.8vw, 35px)}
+    .court{min-height:clamp(250px, 29vh, 330px)}
+    .gameboard-data{gap:8px}
+    .game-stat{padding:9px 10px}
+    .game-stat-value{font-size:clamp(20px, 3.6vw, 28px)}
+    .game-feed{display:flex}
+    .signup{margin-top:20px}
+    .signup-row{flex-direction:row;gap:var(--s2);padding:5px}
+    .signup-input{font-size:15px;padding:12px 14px}
+    .signup-btn{width:auto;padding:12px 22px;font-size:12px}
+    .signup-help{margin-top:8px;font-size:8px;min-height:11px}
+    .ticker-strip{height:40px}
+  }
+
+  @media (min-width: 761px) and (max-width: 900px) and (orientation: portrait) and (max-height: 1100px){
+    .topbar{padding:16px clamp(var(--s4), 5.5vw, var(--s6)) 10px}
+    .topbar-lockup{height:26px}
+    .hero{padding:12px clamp(var(--s4), 5.5vw, var(--s6)) 10px}
+    .hero-inner{height:auto;gap:16px}
+    .flip-shell{gap:7px}
+    .flip-card{
+      width:clamp(34px, 5vw, 42px);
+      height:clamp(48px, 7vw, 58px);
+    }
+    .flip-card-glyph{font-size:clamp(27px, 4.2vw, 34px)}
+    .flip-card.is-space{width:8px}
+    .brand-line{row-gap:30px}
+    .brand-line h1{font-size:clamp(64px, 9.6vw, 76px)}
+    html[lang="ru"] .brand-line h1{font-size:clamp(48px, 7.2vw, 58px)}
+    html[lang="az"] .brand-line h1{font-size:clamp(60px, 9vw, 72px)}
+    .gameboard{gap:8px}
+    .gameboard::before{inset:-18px -18px -16px -18px}
+    .game-message{height:88px}
+    .game-message-line{font-size:clamp(27px, 3.6vw, 34px)}
+    .court{min-height:clamp(210px, 23vh, 246px)}
+    .game-stat{padding:8px 10px}
+    .game-stat-value{font-size:clamp(20px, 2.7vw, 26px)}
+    .signup{margin-top:20px}
+    .signup-row{padding:5px}
+    .signup-input{padding:12px 14px}
+    .signup-btn{padding:12px 22px}
+    .signup-help{margin-top:8px;font-size:9px;min-height:12px}
+    .ticker-strip{height:42px}
+    .ticker-meta{font-size:9px}
+    .ticker-track{font-size:9px}
+  }
+
+  @media (min-width: 600px) and (max-width: 760px) and (min-height: 850px) and (max-height: 940px){
+    .topbar{padding-top:10px;padding-bottom:8px}
+    .topbar-lockup{height:22px}
+    .hero{padding-top:6px;padding-bottom:8px}
+    .hero-inner{gap:12px}
+    .flip-shell{gap:6px}
+    .flip-card{
+      width:clamp(32px, 5.6vw, 38px);
+      height:clamp(44px, 7.3vw, 52px);
+    }
+    .flip-card-glyph{font-size:clamp(25px, 4.4vw, 31px)}
+    .brand-line{gap:18px}
+    .brand-line h1{font-size:clamp(56px, 10vw, 66px)}
+    html[lang="ru"] .brand-line h1{font-size:clamp(42px, 7.5vw, 52px)}
+    html[lang="az"] .brand-line h1{font-size:clamp(52px, 9.4vw, 62px)}
+    .gameboard{gap:6px}
+    .gameboard::before{inset:-14px -14px -12px -14px}
+    .game-message{height:86px;padding:8px 10px}
+    .game-message-line{font-size:clamp(24px, 4.5vw, 30px)}
+    .court{min-height:clamp(180px, 23vh, 215px)}
+    .game-stat{padding:7px 9px}
+    .game-stat-value{font-size:clamp(18px, 3.3vw, 24px)}
+    .signup{margin-top:14px}
+    .signup-help{display:none}
+    .signup-help.is-error{display:block;margin-top:5px}
+    .ticker-strip{height:36px}
+  }
+
+  @media (min-width: 761px) and (max-width: 900px) and (orientation: portrait) and (max-height: 960px){
+    .topbar{padding-top:12px;padding-bottom:8px}
+    .hero{padding-top:8px;padding-bottom:8px}
+    .hero-inner{gap:12px}
+    .brand-line{row-gap:22px}
+    .brand-line h1{font-size:clamp(56px, 8.6vw, 68px)}
+    html[lang="ru"] .brand-line h1{font-size:clamp(42px, 6.7vw, 52px)}
+    html[lang="az"] .brand-line h1{font-size:clamp(54px, 8vw, 64px)}
+    .game-message{height:82px}
+    .game-message-line{font-size:clamp(24px, 3.4vw, 30px)}
+    .court{min-height:clamp(174px, 20vh, 190px)}
+    .signup{margin-top:14px}
+    .signup-help{display:none}
+    .signup-help.is-error{display:block;margin-top:5px}
+    .ticker-strip{height:38px}
+  }
+
+  @media (min-width: 1000px) and (max-width: 1180px) and (orientation: landscape){
+    .brand-line{
+      grid-template-columns:minmax(0, 1fr) minmax(430px, 500px);
+      column-gap:clamp(var(--s3), 3vw, var(--s5));
+    }
+    .gameboard{width:min(100%, 500px);max-width:500px}
+    .signup{max-width:100%}
+    .ticker-strip{height:42px}
+    .ticker-meta,.ticker-tag{font-size:9px}
   }
 </style>
 </head>
@@ -1978,7 +2190,7 @@
         feed: 'Ссылка собирает состав.',
         messageKicker: 'Все игры в одном месте',
         messageLead: 'Все игры.',
-        messageAccent: 'Одно приложение.',
+        messageAccent: 'Один SQUAD.',
         messageTail: '',
         hot: [1, 4],
         players: [[19,22,.78],[28,56,1],[38,34,.82],[49,64,.78],[58,28,1],[68,54,.78],[78,22,.74],[84,68,.72]]
