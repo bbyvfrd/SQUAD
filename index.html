@@ -2719,7 +2719,16 @@
   let turnstileWidgetId = null;
   let turnstileLoadFailed = false;
   let turnstileLoadAttempts = 0;
+  let pendingTurnstileResolve = null;
   const TURNSTILE_MAX_ATTEMPTS = 25; // 25 × 200ms = 5s
+  const TURNSTILE_EXECUTE_TIMEOUT_MS = 10000;
+  function resolvePendingTurnstile(token) {
+    if (pendingTurnstileResolve) {
+      const r = pendingTurnstileResolve;
+      pendingTurnstileResolve = null;
+      r(token);
+    }
+  }
   function renderTurnstile() {
     if (typeof window.turnstile === 'undefined') {
       turnstileLoadAttempts++;
@@ -2734,6 +2743,10 @@
       sitekey: TURNSTILE_SITE_KEY,
       size: 'invisible',
       action: 'subscribe',
+      callback: (token) => resolvePendingTurnstile(token),
+      'error-callback': () => resolvePendingTurnstile(''),
+      'expired-callback': () => resolvePendingTurnstile(''),
+      'timeout-callback': () => resolvePendingTurnstile(''),
     });
   }
   renderTurnstile();
@@ -2770,7 +2783,11 @@
     try {
       let token = '';
       if (turnstileWidgetId !== null && window.turnstile) {
-        token = await window.turnstile.execute(turnstileWidgetId, { action: 'subscribe' });
+        token = await new Promise((resolve) => {
+          pendingTurnstileResolve = resolve;
+          setTimeout(() => resolvePendingTurnstile(''), TURNSTILE_EXECUTE_TIMEOUT_MS);
+          window.turnstile.execute(turnstileWidgetId);
+        });
       }
       const res = await fetch('/api/subscribe', {
         method: 'POST',
