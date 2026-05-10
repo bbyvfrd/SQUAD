@@ -38,7 +38,11 @@ interface ButtondownResult {
   detail?: string;
 }
 
-async function subscribeToButtondown(email: string, apiKey: string): Promise<ButtondownResult> {
+async function subscribeToButtondown(
+  email: string,
+  apiKey: string,
+  ip: string | null,
+): Promise<ButtondownResult> {
   try {
     const res = await fetch(BUTTONDOWN_URL, {
       method: 'POST',
@@ -47,7 +51,11 @@ async function subscribeToButtondown(email: string, apiKey: string): Promise<But
         'Content-Type': 'application/json',
         Accept: 'application/json',
       },
-      body: JSON.stringify({ email_address: email, tags: ['squad-waitlist'] }),
+      body: JSON.stringify({
+        email_address: email,
+        tags: ['squad-waitlist'],
+        ...(ip ? { ip_address: ip } : {}),
+      }),
     });
 
     const text = await res.text();
@@ -124,7 +132,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     return jsonResponse({ ok: false, error: 'challenge_failed' }, 403);
   }
 
-  const result = await subscribeToButtondown(parsed.email, env.BUTTONDOWN_API_KEY);
+  const result = await subscribeToButtondown(parsed.email, env.BUTTONDOWN_API_KEY, ip);
   if (!result.ok) {
     return jsonResponse(
       {
