@@ -45,6 +45,7 @@
 </script><link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@100..900&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
 <style>
   /* ─── DESIGN.md tokens ──────────────────────────────────── */
   :root{
@@ -1769,6 +1770,9 @@
             autocomplete="email" inputmode="email">
           <button class="signup-btn" type="submit" data-i18n="emailButton">Notify me</button>
         </div>
+        <input type="text" name="hp" tabindex="-1" autocomplete="off" aria-hidden="true"
+               style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
+        <div id="turnstile-widget" style="margin-top:var(--s2)"></div>
         <div class="signup-help" id="signupHelp" data-i18n="emailHelp" aria-live="polite">
           Launch signal only. No spam.
         </div>
@@ -1796,6 +1800,8 @@
 (function() {
   'use strict';
 
+  const TURNSTILE_SITE_KEY = '0x4AAAAAADMKO7engnHeHeZX';
+
   /* ─── i18n strings (2-word coming-soon for every language) ── */
   const STRINGS = {
     en: {
@@ -1815,6 +1821,7 @@
       emailButton:      'Notify me',
       emailHelp:        'Launch signal only. No spam.',
       emailErrorBad:    'That does not look like a real email.',
+      emailErrorServer: 'Could not submit. Try again in a moment.',
       emailErrorEmpty:  'Drop in your email first.',
       successLine:      "YOU'RE",
       successAccent:    'IN.',
@@ -1840,6 +1847,7 @@
       emailButton:      'Уведомить',
       emailHelp:        'Только сигнал о запуске. Без спама.',
       emailErrorBad:    'Проверьте email.',
+      emailErrorServer: 'Не удалось отправить. Попробуйте ещё раз.',
       emailErrorEmpty:  'Сначала введите email.',
       successLine:      'ВЫ В',
       successAccent:    'СПИСКЕ.',
@@ -1865,6 +1873,7 @@
       emailButton:      'Xəbər ver',
       emailHelp:        'Yalnız start siqnalı. Spam yoxdur.',
       emailErrorBad:    'E-poçt düzgün görünmür.',
+      emailErrorServer: 'Göndərilə bilmədi. Bir az sonra yenidən cəhd edin.',
       emailErrorEmpty:  'Əvvəlcə e-poçtunu yaz.',
       successLine:      'SİYAHIDA',
       successAccent:    'YERİN VAR.',
@@ -2495,7 +2504,24 @@
   const help = document.getElementById('signupHelp');
   const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-  form.addEventListener('submit', (e) => {
+  let turnstileWidgetId = null;
+  function renderTurnstile() {
+    if (typeof window.turnstile === 'undefined') {
+      setTimeout(renderTurnstile, 200);
+      return;
+    }
+    turnstileWidgetId = window.turnstile.render('#turnstile-widget', {
+      sitekey: TURNSTILE_SITE_KEY,
+      size: 'invisible',
+      action: 'subscribe',
+    });
+  }
+  renderTurnstile();
+
+  const submitBtn = form.querySelector('.signup-btn');
+  const hpInput = form.querySelector('input[name="hp"]');
+
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
     const dict = STRINGS[currentLang];
     const v = (input.value || '').trim();
@@ -2511,7 +2537,43 @@
       input.focus();
       return;
     }
-    celebrateThenLand();
+
+    submitBtn.disabled = true;
+    help.classList.remove('is-error');
+
+    try {
+      let token = '';
+      if (turnstileWidgetId !== null && window.turnstile) {
+        token = await window.turnstile.execute(turnstileWidgetId, { action: 'subscribe' });
+      }
+      const res = await fetch('/api/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: v,
+          turnstileToken: token,
+          hp: hpInput ? hpInput.value : '',
+        }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || !data.ok) {
+        help.textContent = dict.emailErrorServer;
+        help.classList.add('is-error');
+        submitBtn.disabled = false;
+        if (turnstileWidgetId !== null && window.turnstile) {
+          window.turnstile.reset(turnstileWidgetId);
+        }
+        return;
+      }
+      celebrateThenLand();
+    } catch (_err) {
+      help.textContent = dict.emailErrorServer;
+      help.classList.add('is-error');
+      submitBtn.disabled = false;
+      if (turnstileWidgetId !== null && window.turnstile) {
+        window.turnstile.reset(turnstileWidgetId);
+      }
+    }
   });
 
   input.addEventListener('input', () => {
