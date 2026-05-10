@@ -4,3 +4,6 @@ https://www.squad.az/* https://squad.az/:splat 301!
 # Force HTTPS (Cloudflare also does this at the edge, belt-and-braces)
 http://squad.az/* https://squad.az/:splat 301!
 http://www.squad.az/* https://squad.az/:splat 301!
+
+# Internal design and product docs — keep them in the repo, not on the public site
+/docs/* /404.html 404

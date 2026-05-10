@@ -1,0 +1,423 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-05-08T15:07:39+04:00",
+  "title": "Design System: SQUAD",
+  "extensions": {
+    "colorMeta": {
+      "fired-terracotta": {
+        "role": "primary",
+        "displayName": "Fired Terracotta",
+        "rampSlug": "terra-500",
+        "canonical": "oklch(63% 0.21 35)",
+        "tonalRamp": [
+          "#FDEDE6",
+          "#FBDDD2",
+          "#F8B79F",
+          "#F26B49",
+          "#F05633",
+          "#EE4721",
+          "#C5371A",
+          "#9D2C14",
+          "#75210E",
+          "#4D1608"
+        ],
+        "rampStops": ["terra-50", "terra-100", "terra-200", "terra-300", "terra-400", "terra-500", "terra-600", "terra-700", "terra-800", "terra-900"]
+      },
+      "deep-terracotta": {
+        "role": "primary",
+        "displayName": "Deep Terracotta",
+        "canonical": "oklch(54% 0.20 35)"
+      },
+      "heat-terracotta": {
+        "role": "primary",
+        "displayName": "Heat Terracotta",
+        "canonical": "oklch(70% 0.18 35)"
+      },
+      "wash-terracotta": {
+        "role": "primary",
+        "displayName": "Wash Terracotta",
+        "canonical": "oklch(91% 0.05 35)"
+      },
+      "jet-ink": {
+        "role": "secondary",
+        "displayName": "Jet Ink",
+        "rampSlug": "steel-700",
+        "canonical": "oklch(20% 0.025 230)",
+        "tonalRamp": [
+          "#F0F2F4",
+          "#D6DBE0",
+          "#BEC4CE",
+          "#8E96A1",
+          "#6B7480",
+          "#3A4550",
+          "#1D3444",
+          "#13222C",
+          "#0C1820",
+          "#060D14"
+        ],
+        "rampStops": ["steel-50", "steel-100", "steel-200", "steel-300", "steel-400", "steel-500", "steel-600", "steel-700", "steel-800", "steel-900"]
+      },
+      "field-navy": {
+        "role": "secondary",
+        "displayName": "Field Navy",
+        "canonical": "oklch(28% 0.04 235)",
+        "tonalRamp": [
+          "oklch(15% 0.025 235)",
+          "oklch(22% 0.035 235)",
+          "oklch(28% 0.04 235)",
+          "oklch(38% 0.045 235)",
+          "oklch(52% 0.04 235)",
+          "oklch(68% 0.03 235)",
+          "oklch(82% 0.02 235)",
+          "oklch(95% 0.008 235)"
+        ]
+      },
+      "warm-linen": {
+        "role": "neutral",
+        "displayName": "Warm Linen",
+        "rampSlug": "linen-200",
+        "canonical": "oklch(92% 0.012 80)",
+        "tonalRamp": [
+          "#FAF8F1",
+          "#F5F2E9",
+          "#EBE7DB",
+          "#D8D4CA",
+          "#B5B0A2",
+          "#8C8775",
+          "#635E4D",
+          "#423F30",
+          "#28261B",
+          "#15130A"
+        ],
+        "rampStops": ["linen-50", "linen-100", "linen-200", "linen-300", "linen-400", "linen-500", "linen-600", "linen-700", "linen-800", "linen-900"]
+      },
+      "pressed-bone": {
+        "role": "neutral",
+        "displayName": "Pressed Bone",
+        "canonical": "oklch(95% 0.01 80)"
+      },
+      "cool-slate": {
+        "role": "neutral",
+        "displayName": "Cool Slate",
+        "canonical": "oklch(80% 0.012 230)"
+      },
+      "deep-slate": {
+        "role": "neutral",
+        "displayName": "Deep Slate",
+        "canonical": "oklch(64% 0.018 230)"
+      },
+      "body-smoke": {
+        "role": "neutral",
+        "displayName": "Body Smoke",
+        "canonical": "oklch(35% 0.018 235)"
+      },
+      "caption-ash": {
+        "role": "neutral",
+        "displayName": "Caption Ash",
+        "canonical": "oklch(52% 0.012 230)"
+      },
+      "hairline": {
+        "role": "neutral",
+        "displayName": "Hairline",
+        "canonical": "oklch(86% 0.008 80)"
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Cover heroes, landing-page heroes, marquee brand moments. Sized to dominate the screen. One terracotta color spike per headline; italic forbidden.",
+        "fontFamily": "Inter Tight, system-ui, sans-serif"
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Section titles, in-card hero text, large content callouts. Uppercase. Two-line with one terracotta accent word.",
+        "fontFamily": "Inter Tight, system-ui, sans-serif"
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Card titles, second-tier headings, pairing titles. Mixed-case, not uppercase.",
+        "fontFamily": "Inter Tight, system-ui, sans-serif"
+      },
+      "lede": {
+        "displayName": "Lede",
+        "purpose": "Hero subtitles and lead paragraphs. Used at the top of pages. Inline emphasis at weight 700.",
+        "fontFamily": "Inter Tight, system-ui, sans-serif"
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Standard body copy in surface cards and content surfaces. Max-width 65–75ch. Inline emphasis via <strong> at weight 700.",
+        "fontFamily": "Inter Tight, system-ui, sans-serif"
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "In-card tactical labels, captions, metadata, score timestamps. The data voice. Always uppercase, always tracked at 0.16em.",
+        "fontFamily": "JetBrains Mono, ui-monospace, monospace"
+      },
+      "kicker": {
+        "displayName": "Kicker",
+        "purpose": "Eyebrows, signage, badges, OOH callouts. The marquee voice. More tracked (0.22em), slightly heavier (600) than Label.",
+        "fontFamily": "JetBrains Mono, ui-monospace, monospace"
+      }
+    },
+    "shadows": [
+      {
+        "name": "hero-lift",
+        "value": "0 2px 6px rgba(0,0,0,0.08), 0 12px 40px rgba(0,0,0,0.08)",
+        "purpose": "Used exclusively on top-level hero cards to lift them off the page background. The only shadow in the entire system."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-out-quart",
+        "value": "cubic-bezier(0.25, 1, 0.5, 1)",
+        "purpose": "Default easing for state transitions. No bounce, no elastic."
+      },
+      {
+        "name": "duration-fast",
+        "value": "180ms",
+        "purpose": "Hover and focus state transitions on interactive elements."
+      },
+      {
+        "name": "duration-standard",
+        "value": "320ms",
+        "purpose": "Surface transitions, modal entry, page-level state changes."
+      },
+      {
+        "name": "reduced-motion-fallback",
+        "value": "0ms",
+        "purpose": "All non-essential animation collapses to instant when user prefers reduced motion."
+      }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "640px" },
+      { "name": "md", "value": "768px" },
+      { "name": "lg", "value": "1024px" },
+      { "name": "xl", "value": "1280px" },
+      { "name": "page-max", "value": "1500px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Hero Card",
+      "kind": "card",
+      "refersTo": "hero-card",
+      "description": "The system's centerpiece component. Used for landing-page heroes, top-of-page brand moments, marquee callouts. Carries the only shadow in the system.",
+      "html": "<div class=\"ds-hero-card\"><span class=\"ds-hero-badge\">FIND YOUR GAME</span><div class=\"ds-hero-kicker\">SPECIMEN 01 · GLOBAL SPORTS</div><h1 class=\"ds-hero-display\">SQUAD<br>UP <span class=\"ds-accent\">NOW</span>.</h1><p class=\"ds-hero-sub\">The single place for recreational sports. Players find games. Organizers run them. Venues get discovered. <strong>Reliability built in.</strong></p></div>",
+      "css": ".ds-hero-card { position: relative; background: #13222C; color: #EBE7DB; border-radius: 6px; padding: 96px 80px; overflow: hidden; box-shadow: 0 2px 6px rgba(0,0,0,0.08), 0 12px 40px rgba(0,0,0,0.08); font-family: 'Inter Tight', system-ui, sans-serif; } .ds-hero-badge { position: absolute; top: 32px; right: 32px; background: #EE4721; color: #EBE7DB; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 12px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; padding: 10px 16px; border-radius: 4px; } .ds-hero-kicker { font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase; color: #EE4721; margin-bottom: 32px; font-weight: 600; } .ds-hero-display { margin: 0; font-family: 'Inter Tight', system-ui, sans-serif; font-weight: 900; font-size: clamp(72px, 12vw, 184px); line-height: 0.82; letter-spacing: -0.04em; text-transform: uppercase; font-style: normal; } .ds-hero-display .ds-accent { color: #EE4721; } .ds-hero-sub { margin-top: 48px; max-width: 580px; font-size: 17px; line-height: 1.6; color: #BEC4CE; font-weight: 400; } .ds-hero-sub strong { color: #EBE7DB; font-weight: 700; }"
+    },
+    {
+      "name": "Surface Card (Light)",
+      "kind": "card",
+      "refersTo": "surface-card",
+      "description": "Standard content card on the linen page. Sits one tonal step above the page via Pressed Bone background.",
+      "html": "<div class=\"ds-surface-card\"><div class=\"ds-eyebrow\">H2 · CONTENT BLOCK</div><h2 class=\"ds-headline\">MOVE<br><span class=\"ds-accent\">TOGETHER</span>.</h2><p class=\"ds-body\">Standard body copy lives here. Inline emphasis at <strong>weight 700</strong> highlights key phrases without breaking the rhythm of the paragraph.</p></div>",
+      "css": ".ds-surface-card { background: #F5F2E9; color: #13222C; border-radius: 6px; padding: 56px; min-height: 380px; display: flex; flex-direction: column; justify-content: space-between; font-family: 'Inter Tight', system-ui, sans-serif; } .ds-surface-card .ds-eyebrow { font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase; color: #6B7480; font-weight: 600; } .ds-surface-card .ds-headline { margin: 24px 0 0; font-family: 'Inter Tight', system-ui, sans-serif; font-weight: 900; font-size: clamp(48px, 6vw, 96px); line-height: 0.88; letter-spacing: -0.035em; text-transform: uppercase; color: #13222C; font-style: normal; } .ds-surface-card .ds-headline .ds-accent { color: #EE4721; } .ds-surface-card .ds-body { margin-top: 32px; font-size: 17px; line-height: 1.6; color: #3A4550; max-width: 65ch; font-weight: 400; } .ds-surface-card .ds-body strong { font-weight: 700; }"
+    },
+    {
+      "name": "Surface Card (Dark)",
+      "kind": "card",
+      "refersTo": "surface-card-dark",
+      "description": "Tonal contrast variant on Field Navy. Used for emphasis or pull-quote moments.",
+      "html": "<div class=\"ds-surface-card-dark\"><div class=\"ds-eyebrow-dark\">PULL QUOTE · DARK</div><h2 class=\"ds-headline-dark\">\"NO BENCH.<br><span class=\"ds-accent\">ALL FRONT.</span>\"</h2><p class=\"ds-body-dark\">Team manifesto, draft 02.</p></div>",
+      "css": ".ds-surface-card-dark { background: #1D3444; color: #EBE7DB; border-radius: 6px; padding: 56px; min-height: 380px; display: flex; flex-direction: column; justify-content: space-between; font-family: 'Inter Tight', system-ui, sans-serif; } .ds-surface-card-dark .ds-eyebrow-dark { font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase; color: #BEC4CE; font-weight: 600; } .ds-surface-card-dark .ds-headline-dark { margin: 24px 0 0; font-family: 'Inter Tight', system-ui, sans-serif; font-weight: 900; font-size: 64px; line-height: 0.88; letter-spacing: -0.035em; text-transform: uppercase; color: #EBE7DB; font-style: normal; } .ds-surface-card-dark .ds-headline-dark .ds-accent { color: #F26B49; } .ds-surface-card-dark .ds-body-dark { margin-top: 20px; font-size: 17px; line-height: 1.6; color: #C9CCD2; font-weight: 400; }"
+    },
+    {
+      "name": "Surface Card (Terracotta)",
+      "kind": "card",
+      "refersTo": "surface-card-terracotta",
+      "description": "The brand-spike variant. One per layout maximum. Italic accents shift to Jet Ink on this surface.",
+      "html": "<div class=\"ds-surface-card-terra\"><div class=\"ds-eyebrow-terra\">HERO CARD · BRAND</div><h2 class=\"ds-headline-terra\">A SQUAD<br><span class=\"ds-accent\">HOLDS</span>.</h2><p class=\"ds-body-terra\">Move together. Hold the line.</p></div>",
+      "css": ".ds-surface-card-terra { background: #EE4721; color: #EBE7DB; border-radius: 6px; padding: 56px; min-height: 380px; display: flex; flex-direction: column; justify-content: space-between; font-family: 'Inter Tight', system-ui, sans-serif; } .ds-surface-card-terra .ds-eyebrow-terra { font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(235,231,219,0.8); font-weight: 600; } .ds-surface-card-terra .ds-headline-terra { margin: 24px 0 0; font-family: 'Inter Tight', system-ui, sans-serif; font-weight: 900; font-size: 72px; line-height: 0.88; letter-spacing: -0.035em; text-transform: uppercase; color: #EBE7DB; font-style: normal; } .ds-surface-card-terra .ds-headline-terra .ds-accent { color: #13222C; } .ds-surface-card-terra .ds-body-terra { margin-top: 20px; font-size: 17px; line-height: 1.6; color: rgba(235,231,219,0.92); font-weight: 400; }"
+    },
+    {
+      "name": "Stat Block",
+      "kind": "card",
+      "refersTo": "stat-block",
+      "description": "Small, dense card for numeric data — scores, counts, KPIs. In a series of three, alternate backgrounds for rhythm: terracotta, jet, bone.",
+      "html": "<div class=\"ds-stats\"><div class=\"ds-stat ds-stat-terra\"><h5 class=\"ds-stat-num\">92<span class=\"ds-accent-jet\">%</span></h5><div class=\"ds-stat-lbl\">WIN RATE</div></div><div class=\"ds-stat ds-stat-jet\"><h5 class=\"ds-stat-num\">14<span class=\"ds-accent-terra\">s</span></h5><div class=\"ds-stat-lbl\">AVG BREAK</div></div><div class=\"ds-stat ds-stat-bone\"><h5 class=\"ds-stat-num\">03</h5><div class=\"ds-stat-lbl\">TROPHIES</div></div></div>",
+      "css": ".ds-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; font-family: 'Inter Tight', system-ui, sans-serif; } .ds-stat { border-radius: 6px; padding: 48px 40px; } .ds-stat-terra { background: #EE4721; color: #EBE7DB; } .ds-stat-jet { background: #13222C; color: #EBE7DB; } .ds-stat-bone { background: #F5F2E9; color: #13222C; } .ds-stat-num { margin: 0; font-family: 'Inter Tight', system-ui, sans-serif; font-weight: 900; font-size: 96px; line-height: 0.82; letter-spacing: -0.04em; font-variant-numeric: tabular-nums; font-style: normal; } .ds-stat-num .ds-accent-jet { color: #13222C; } .ds-stat-num .ds-accent-terra { color: #EE4721; } .ds-stat-lbl { margin-top: 24px; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 500; }"
+    },
+    {
+      "name": "Badge",
+      "kind": "chip",
+      "refersTo": "badge",
+      "description": "The smallest brand-marked element. Mono uppercase tactical label on terracotta.",
+      "html": "<span class=\"ds-badge\">FIND YOUR GAME</span>",
+      "css": ".ds-badge { display: inline-block; background: #EE4721; color: #EBE7DB; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 12px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; padding: 10px 16px; border-radius: 4px; }"
+    },
+    {
+      "name": "Eyebrow",
+      "kind": "custom",
+      "refersTo": "eyebrow",
+      "description": "Mono uppercase tactical label that sits above a section title. Typography element, not a containerized component.",
+      "html": "<div class=\"ds-eyebrow-stand\">BRAND IDENTITY · v3.0 · 2026</div>",
+      "css": ".ds-eyebrow-stand { font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; color: #EE4721; }"
+    },
+    {
+      "name": "Diagonal Accent Rule",
+      "kind": "custom",
+      "refersTo": "diagonal-accent",
+      "description": "Signature decorative element. A 4px-wide, 220px-tall vertical bar of Fired Terracotta. Once per brand surface, maximum.",
+      "html": "<div class=\"ds-accent-rule\" aria-hidden=\"true\"></div>",
+      "css": ".ds-accent-rule { width: 4px; height: 220px; background: #EE4721; }"
+    },
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Brand CTA. The color spike. One per surface, maximum. Uses Pressed Jet text for WCAG AA contrast at normal button sizes.",
+      "html": "<button class=\"ds-btn-primary\">Join Game</button>",
+      "css": ".ds-btn-primary { background: #EE4721; color: #0C1820; border: none; font-family: 'Inter Tight', system-ui, sans-serif; font-weight: 800; font-size: 15px; padding: 14px 26px; border-radius: 6px; letter-spacing: 0.06em; text-transform: uppercase; cursor: pointer; transition: background 180ms cubic-bezier(0.25,1,0.5,1), transform 180ms cubic-bezier(0.25,1,0.5,1); } .ds-btn-primary:hover { background: #F26B49; transform: translateY(-1px); } .ds-btn-primary:active { transform: translateY(0); background: #F05633; } .ds-btn-primary:focus-visible { outline: 2px solid #EE4721; outline-offset: 2px; }"
+    },
+    {
+      "name": "Secondary Button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Strong action on light backgrounds. Used when primary is reserved for the page CTA.",
+      "html": "<button class=\"ds-btn-secondary\">Create Game</button>",
+      "css": ".ds-btn-secondary { background: #13222C; color: #EBE7DB; border: none; font-family: 'Inter Tight', system-ui, sans-serif; font-weight: 800; font-size: 15px; padding: 14px 26px; border-radius: 6px; letter-spacing: 0.06em; text-transform: uppercase; cursor: pointer; transition: background 180ms cubic-bezier(0.25,1,0.5,1), transform 180ms cubic-bezier(0.25,1,0.5,1); } .ds-btn-secondary:hover { background: #0C1820; transform: translateY(-1px); } .ds-btn-secondary:active { transform: translateY(0); }"
+    },
+    {
+      "name": "Outline Button",
+      "kind": "button",
+      "refersTo": "button-outline",
+      "description": "Tertiary action on light surfaces. 2px Jet border with transparent background.",
+      "html": "<button class=\"ds-btn-outline\">Browse Venues</button>",
+      "css": ".ds-btn-outline { background: transparent; color: #13222C; border: 2px solid #13222C; font-family: 'Inter Tight', system-ui, sans-serif; font-weight: 800; font-size: 15px; padding: 14px 26px; border-radius: 6px; letter-spacing: 0.06em; text-transform: uppercase; cursor: pointer; transition: background 180ms cubic-bezier(0.25,1,0.5,1); } .ds-btn-outline:hover { background: rgba(19,34,44,0.06); }"
+    },
+    {
+      "name": "Outline Linen Button",
+      "kind": "button",
+      "refersTo": "button-outline-linen",
+      "description": "Tertiary action on dark surfaces. 2px Cool Slate border with transparent background.",
+      "html": "<button class=\"ds-btn-outline-linen\">List a Venue</button>",
+      "css": ".ds-btn-outline-linen { background: transparent; color: #EBE7DB; border: 2px solid #BEC4CE; font-family: 'Inter Tight', system-ui, sans-serif; font-weight: 800; font-size: 15px; padding: 14px 26px; border-radius: 6px; letter-spacing: 0.06em; text-transform: uppercase; cursor: pointer; transition: background 180ms cubic-bezier(0.25,1,0.5,1); } .ds-btn-outline-linen:hover { background: rgba(235,231,219,0.08); }"
+    },
+    {
+      "name": "Ghost Button",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "Tertiary text-link. No background, no border. Terracotta text only.",
+      "html": "<button class=\"ds-btn-ghost\">View All →</button>",
+      "css": ".ds-btn-ghost { background: transparent; color: #EE4721; border: none; font-family: 'Inter Tight', system-ui, sans-serif; font-weight: 800; font-size: 15px; padding: 14px 26px; border-radius: 6px; letter-spacing: 0.06em; text-transform: uppercase; cursor: pointer; transition: background 180ms cubic-bezier(0.25,1,0.5,1); } .ds-btn-ghost:hover { background: rgba(238,71,33,0.08); }"
+    },
+    {
+      "name": "Ticker Footer Metadata",
+      "kind": "custom",
+      "refersTo": "ticker-footer-metadata",
+      "description": "Dense mono ticker and footer metadata on dark surfaces. Uses Deep Slate for tiny copyright text on Jet Ink to preserve AA contrast.",
+      "html": "<div class=\"ds-ticker-meta\"><span class=\"ds-ticker-dot\"></span><span>LIVE FEED</span><span class=\"ds-ticker-tag\">© 2026 SQUAD INC.</span></div>",
+      "css": ".ds-ticker-meta { background: #13222C; color: #BEC4CE; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; } .ds-ticker-dot { display: inline-block; width: 8px; height: 8px; border-radius: 999px; background: #EE4721; } .ds-ticker-tag { color: #8E96A1; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "Built Chunky",
+    "overview": "SQUAD looks like the sign on the wall of a working gym, not the gradient on a fitness app. The system is built around heavy display type set in Inter Tight 900, a fired terracotta that does the talking, and tactical jet-and-navy that holds the page. Every surface should feel substantial enough to lean against. The interface is a teammate: direct, present, useful, and incapable of fading into the background.\n\nThe aesthetic is industrial-tactical-athletic. Inter Tight at black weight (900) carries display, headline, title, lede, and body. JetBrains Mono carries every tactical label and kicker. Two fonts, no third family. One terracotta accent that does heavy work in small doses. Generous whitespace around heavy type. No drop shadows except the one subtle ambient lift on hero cards. No gradients. No glass. No italic.\n\nThis system explicitly rejects the football-app neon-on-black template (FotMob, OneFootball, betting-app dark) and the Azerbaijan-government-portal cream-and-blue civic-portal aesthetic. SQUAD does not chase either failure mode.",
+    "keyCharacteristics": [
+      "Inter Tight 900 carries the display tier, sized to be visible across a room.",
+      "Two fonts only: Inter Tight (sans, every role) + JetBrains Mono (label + kicker).",
+      "Fired terracotta accent used surgically as a single-word color spike, never as a wash.",
+      "Jet ink + warm linen as the dominant pairing, navy + bone as secondary surfaces.",
+      "Italic forbidden as an accent device; color is the spike.",
+      "Flat by default. Depth comes from color contrast and scale, not shadow.",
+      "Generous spacing on the 8-grid; no dense clusters."
+    ],
+    "rules": [
+      {
+        "name": "The Terracotta Spike Rule",
+        "body": "Fired terracotta is a spike, not a wash. Use it for one element on a screen (a badge, a stat block, a single accent word, a button). When it appears as a full-bleed surface, it is the focal point of that section, not a backdrop. Never use terracotta as a body-text color. Never use it on more than ~15% of any composition.",
+        "section": "colors"
+      },
+      {
+        "name": "The No Pure Black, No Pure White Rule",
+        "body": "Jet Ink (#13222C) replaces black. Warm Linen (#EBE7DB) replaces white. Pure #000 and #fff are forbidden across the entire system. Both endpoints are tinted toward the brand temperature.",
+        "section": "colors"
+      },
+      {
+        "name": "The CTA Contrast Rule",
+        "body": "Normal-size text on terracotta CTAs uses Pressed Jet (#0C1820), not Warm Linen. The approved primary button stack is #0C1820 on #EE4721 default (4.76:1), #0C1820 on #F26B49 hover (5.98:1), and #0C1820 on #F05633 active (5.21:1). This is the accessibility exception to the usual warm-linen-on-terracotta brand surface pairing.",
+        "section": "components"
+      },
+      {
+        "name": "The Tactical Mono Rule",
+        "body": "Mono is reserved for data, metadata, tactical labels, and supporting text. It is NOT used for body copy, headlines, or anything narrative. Mono is the system speaking to the user about the system; everything else uses sans.",
+        "section": "colors"
+      },
+      {
+        "name": "The Color Spike Rule",
+        "body": "One accent word per headline, set in fired terracotta. Everything else stays in jet ink at the same heavy weight. Italic is forbidden as an accent device because pan-language italic at black weight is unreliable across Inter Tight's full subset coverage. Color does the spike, not slant.",
+        "section": "typography"
+      },
+      {
+        "name": "The Uppercase Display Rule",
+        "body": "Display and Headline tiers are uppercase. Title and below are mixed-case. Mono labels and kickers are always uppercase. This split is non-negotiable: it is what gives the system its signage feel.",
+        "section": "typography"
+      },
+      {
+        "name": "The Two-Voice Mono Rule",
+        "body": "Mono has exactly two voices. Label (11px / 500 / 0.16em) for in-card data and metadata; Kicker (12px / 600 / 0.22em) for eyebrows and signage. Any letter-spacing other than 0.16em or 0.22em on a mono element is a violation.",
+        "section": "typography"
+      },
+      {
+        "name": "The Tight-On-Tight Rule",
+        "body": "Inter Tight comes pre-tightened by design; the system tightens further with negative letter-spacing on display and headline tiers (-0.04em and -0.035em respectively). Do not loosen this. The tightness is the brand's posture.",
+        "section": "typography"
+      },
+      {
+        "name": "The Tabular Numerals Rule",
+        "body": "Score panels, stat blocks, and any column of digits use font-variant-numeric: tabular-nums. Inter Tight supports it; the rule is to opt in, not rely on the default.",
+        "section": "typography"
+      },
+      {
+        "name": "The No Reflex Rule",
+        "body": "Inter is the AI-default sans of the last decade. Inter Tight is its tighter, denser sibling. SQUAD avoids the reflex by leading with Black weight (900), heavy negative tracking, the terracotta color spike, and warm linen as the page background. Whenever a SQUAD surface starts to feel like Linear or Notion, the cause is (a) not enough weight, (b) not enough scale, or (c) page background drifting toward white. Catch and correct.",
+        "section": "typography"
+      },
+      {
+        "name": "The Trilingual Type Test (verified 2026-05-08)",
+        "body": "Inter Tight has been verified for Azerbaijani diacritics (ə, ç, ğ, ı, İ, ö, ş, ü) and full Cyrillic at weight 900 via Google Fonts CSS API. The variable font ships Latin, Latin Extended-A, Cyrillic, Cyrillic Extended, Greek, Greek Extended, and Vietnamese subsets at every weight. Re-verify any time a major Inter Tight version bump lands.",
+        "section": "typography"
+      },
+      {
+        "name": "The Flat-By-Default Rule",
+        "body": "Every surface is flat unless it is the page-defining hero card. Stat blocks, surface cards, badges, buttons, inputs are all flat. Depth is created by color shift (linen → bone → jet) and scale, not by shadow.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Hairline Rule",
+        "body": "When separation is needed and a color shift is wrong, use a single 1px Hairline #D8D4CA rule. No multi-pixel borders. No dotted or dashed. No double rules. The hairline is the only border in the system.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do lean on Inter Tight 900 display type as the loudest brand element. Type carries SQUAD; decoration does not.",
+      "Do use Fired Terracotta as a surgical spike, one accent word, one badge, one stat block, one surface per composition.",
+      "Do pair Jet Ink + Warm Linen as the dominant tonal axis. Field Navy and Pressed Bone are the secondary surfaces.",
+      "Do keep mono reserved for tactical labels, metadata, and data, never narrative copy.",
+      "Do stay flat. Depth is built from color and scale, not shadow.",
+      "Do use the 8-grid spacing scale (8 / 16 / 24 / 32 / 48 / 56 / 64 / 80 / 96 / 128). Section vertical padding lives in the 80-140 range; card internal padding lives in the 48-96 range.",
+      "Do use Hero Lift shadow only on top-level hero cards. Every other surface stays flat.",
+      "Do use the 6px radius on cards, surfaces, and stat blocks. Use 4px on badges. Larger radii are reserved for future components.",
+      "Do uppercase Display, Headline, and Label tiers. Mixed-case Title and below.",
+      "Do test typography candidates against Azerbaijani diacritics and Cyrillic at the heaviest weight before locking a family.",
+      "Do keep small CTA labels contrast-safe: Pressed Jet on terracotta buttons, Deep Slate for tiny footer metadata on jet."
+    ],
+    "donts": [
+      "Don't look like football-app neon-on-black (FotMob, OneFootball, betting apps). The category-reflex aesthetic for football product. Reject.",
+      "Don't look like Azerbaijan-government-portal cream-and-blue. Reject civic-portal stiffness in all forms.",
+      "Don't use pure #000 or #fff. Jet Ink and Warm Linen are the endpoints.",
+      "Don't use border-left or border-right greater than 1px as a colored stripe accent on cards or list items. Use full borders, color shifts, or leading mono labels instead.",
+      "Don't apply background-clip text gradient text. Emphasis comes from weight, scale, and the terracotta color spike, never from gradient fills on type.",
+      "Don't use glassmorphism, frosted blurs, or backdrop-filter for decorative depth. The system is flat.",
+      "Don't stack identical card grids of icon + heading + text. Vary card weight, surface, and scale.",
+      "Don't use Fired Terracotta as a body-text color. Never. It is a spike, not a body voice.",
+      "Don't use Fired Terracotta as a background wash on more than ~15% of a composition. Beyond that, it stops spiking and starts droning.",
+      "Don't set normal-size primary CTA labels in Warm Linen on Fired Terracotta, or tiny footer copyright in Caption Ash on Jet Ink.",
+      "Don't introduce shadows on stat blocks, surface cards, badges, buttons, or any element other than top-level hero cards. The Flat-By-Default Rule is absolute.",
+      "Don't redraw, recolor (outside the approved tint set), or otherwise modify the logo. The logo is locked.",
+      "Don't lock a typography family without testing it in all three scripts (EN / RU / AZ) at the chosen heaviest weight. Fallback to a different weight or family across languages breaks the brand.",
+      "Don't invent new card or surface variants without referencing the documented set. New patterns extend the system; they do not replace it.",
+      "Don't use em dashes in brand or product copy. Use commas, colons, semicolons, periods, or parentheses."
+    ]
+  }
+}
