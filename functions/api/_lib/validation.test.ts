@@ -80,4 +80,16 @@ describe('parseSubscribeBody', () => {
     expect(parseSubscribeBody({ email: 'a@b.co' }).ok).toBe(false);
     expect(parseSubscribeBody({ email: 1, turnstileToken: 't' }).ok).toBe(false);
   });
+
+  it('passes a non-string hp through to isHoneypotTripped', () => {
+    const out = parseSubscribeBody({
+      email: 'a@b.co',
+      turnstileToken: 'tok',
+      hp: 42,
+    });
+    expect(out.ok).toBe(true);
+    if (out.ok) {
+      expect(isHoneypotTripped(out.hp)).toBe(true);
+    }
+  });
 });

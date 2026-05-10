@@ -14,7 +14,7 @@ export function isHoneypotTripped(value: unknown): boolean {
 }
 
 export type ParsedBody =
-  | { ok: true; email: string; turnstileToken: string; hp: string }
+  | { ok: true; email: string; turnstileToken: string; hp: unknown }
   | { ok: false; reason: string };
 
 export function parseSubscribeBody(input: unknown): ParsedBody {
@@ -28,11 +28,10 @@ export function parseSubscribeBody(input: unknown): ParsedBody {
   if (typeof obj.turnstileToken !== 'string') {
     return { ok: false, reason: 'turnstileToken must be a string' };
   }
-  const hp = typeof obj.hp === 'string' ? obj.hp : '';
   return {
     ok: true,
     email: obj.email.trim().toLowerCase(),
     turnstileToken: obj.turnstileToken,
-    hp,
+    hp: obj.hp === undefined ? '' : obj.hp,
   };
 }
