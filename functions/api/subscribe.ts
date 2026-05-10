@@ -33,6 +33,9 @@ async function verifyTurnstile(token: string, secret: string, ip: string | null)
 interface ButtondownResult {
   ok: boolean;
   alreadySubscribed: boolean;
+  blockedByFirewall: boolean;
+  status?: number;
+  detail?: string;
 }
 
 async function subscribeToButtondown(email: string, apiKey: string): Promise<ButtondownResult> {
@@ -42,22 +45,54 @@ async function subscribeToButtondown(email: string, apiKey: string): Promise<But
       headers: {
         Authorization: `Token ${apiKey}`,
         'Content-Type': 'application/json',
+        Accept: 'application/json',
       },
       body: JSON.stringify({ email_address: email, tags: ['squad-waitlist'] }),
     });
 
-    if (res.status === 201) return { ok: true, alreadySubscribed: false };
+    const text = await res.text();
 
-    // Buttondown returns 400 with detail "already subscribed" for duplicates.
-    if (res.status === 400) {
-      const text = await res.text();
-      if (/already.*subscrib/i.test(text)) {
-        return { ok: true, alreadySubscribed: true };
-      }
+    if (res.status === 201 || res.status === 200) {
+      return { ok: true, alreadySubscribed: false, blockedByFirewall: false, status: res.status };
     }
-    return { ok: false, alreadySubscribed: false };
-  } catch {
-    return { ok: false, alreadySubscribed: false };
+
+    const isDuplicateSubscriberError =
+      res.status === 400 &&
+      /email|subscriber|subscrib/i.test(text) &&
+      /already|exists|duplicate|collision|overwrite|preserve/i.test(text);
+
+    if (isDuplicateSubscriberError) {
+      return { ok: true, alreadySubscribed: true, blockedByFirewall: false, status: res.status };
+    }
+
+    const isFirewallBlockedError =
+      res.status === 400 &&
+      /firewall|blocked|spam|abuse|risk|suspicious/i.test(text);
+
+    if (isFirewallBlockedError) {
+      return {
+        ok: false,
+        alreadySubscribed: false,
+        blockedByFirewall: true,
+        status: res.status,
+        detail: text.slice(0, 300),
+      };
+    }
+
+    return {
+      ok: false,
+      alreadySubscribed: false,
+      blockedByFirewall: false,
+      status: res.status,
+      detail: text.slice(0, 300),
+    };
+  } catch (error) {
+    return {
+      ok: false,
+      alreadySubscribed: false,
+      blockedByFirewall: false,
+      detail: error instanceof Error ? error.message : 'unknown_fetch_error',
+    };
   }
 }
 
@@ -91,7 +126,15 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
 
   const result = await subscribeToButtondown(parsed.email, env.BUTTONDOWN_API_KEY);
   if (!result.ok) {
-    return jsonResponse({ ok: false, error: 'upstream_error' }, 502);
+    return jsonResponse(
+      {
+        ok: false,
+        error: result.blockedByFirewall ? 'buttondown_firewall_blocked' : 'upstream_error',
+        upstreamStatus: result.status,
+        upstreamDetail: result.detail,
+      },
+      result.blockedByFirewall ? 403 : 502,
+    );
   }
 
   return jsonResponse({ ok: true, alreadySubscribed: result.alreadySubscribed });
