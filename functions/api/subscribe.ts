@@ -126,6 +126,21 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     return jsonResponse({ ok: false, error: 'invalid_email' }, 400);
   }
 
+  // Local-dev bypass: when running under `wrangler pages dev` without `.dev.vars`
+  // configured, both secrets are unbound and the real Turnstile + Buttondown calls
+  // would fail. Allow the success path so UI work is unblockable without prod keys.
+  // Two gates so this never trips in production:
+  //   1) hostname must be localhost / 127.0.0.1 (Cloudflare Pages always serves on
+  //      a real hostname like squad.az or *.pages.dev)
+  //   2) at least one secret must be missing (Pages binds both in every env)
+  // The response carries `dev:true` so it's obvious in network logs.
+  const requestUrl = new URL(request.url);
+  const isLocalHost = requestUrl.hostname === 'localhost' || requestUrl.hostname === '127.0.0.1';
+  const secretsMissing = !env.TURNSTILE_SECRET || !env.BUTTONDOWN_API_KEY;
+  if (isLocalHost && secretsMissing) {
+    return jsonResponse({ ok: true, dev: true });
+  }
+
   const ip = request.headers.get('CF-Connecting-IP');
   const turnstileOk = await verifyTurnstile(parsed.turnstileToken, env.TURNSTILE_SECRET, ip);
   if (!turnstileOk) {

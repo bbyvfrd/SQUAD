@@ -758,44 +758,145 @@
   .signup-row{display:flex;gap:var(--s2);background:var(--form-bg);
     border:1px solid var(--form-border);border-radius:10px;padding:6px;
     transition:border-color var(--dur-fast) var(--ease-out),
-               box-shadow var(--dur-fast) var(--ease-out)}
+               box-shadow var(--dur-fast) var(--ease-out);
+    position:relative;
+    z-index:1}
   .signup-row:focus-within{
     border-color:var(--terra);
+    border-width:2px;
+    padding:5px;  /* shrink to compensate for thicker border */
     box-shadow:0 0 0 4px rgba(238,71,33,0.12);
   }
   .signup-input{flex:1;min-width:0;background:transparent;border:none;outline:none;
     color:var(--form-text);font-family:var(--font-sans);font-size:16px;font-weight:500;
-    padding:14px 16px;letter-spacing:-0.005em}
+    padding:14px 16px;letter-spacing:-0.005em;
+    caret-color:var(--terra)}
   .signup-input::placeholder{color:var(--form-placeholder)}
+  /* ─── Button: chunkier weight, deeper press, no glow shadow ──────────────── */
   .signup-btn{background:var(--terra);color:var(--steel-800);border:none;
-    font-family:var(--font-sans);font-weight:800;font-size:14px;
-    padding:14px 24px;border-radius:7px;
-    letter-spacing:0.06em;text-transform:uppercase;cursor:pointer;
+    font-family:var(--font-sans);font-weight:900;font-size:16px;
+    padding:16px 30px;border-radius:7px;
+    letter-spacing:0.07em;text-transform:uppercase;cursor:pointer;
+    position:relative;overflow:hidden;
     transition:background var(--dur-fast) var(--ease-out),
-               transform var(--dur-fast) var(--ease-out),
-               box-shadow var(--dur-fast) var(--ease-out);
+               transform var(--dur-fast) var(--ease-out);
     flex:0 0 auto;white-space:nowrap}
-  .signup-btn:hover{background:var(--terra-300);transform:translateY(-1px);
-    box-shadow:0 8px 20px rgba(238,71,33,0.32)}
-  .signup-btn:active{transform:translateY(0);background:var(--terra-400);
-    box-shadow:0 2px 8px rgba(238,71,33,0.28)}
+  /* Subtle white chalk-stroke highlight at the top of the button on hover. */
+  .signup-btn::before{
+    content:"";
+    position:absolute;
+    left:8px; right:8px; top:0;
+    height:1px;
+    background:rgba(255,255,255,0);
+    transition:background 200ms var(--ease-out);
+    pointer-events:none;
+  }
+  .signup-btn:hover{background:var(--terra-300);transform:translateY(-1px)}
+  .signup-btn:hover::before{background:rgba(255,255,255,0.36)}
+  /* Deeper press: the button "thunks" 2px down so the click feels physical. */
+  .signup-btn:active{transform:translateY(2px);background:var(--terra-400)}
   .signup-btn:focus-visible{outline:2px solid var(--terra);outline-offset:3px}
+
+  /* Armed state: valid email locks an inset deep-terracotta hairline on the button. */
+  .signup.is-valid .signup-btn{
+    box-shadow:inset 0 0 0 1.5px var(--terra-700);
+  }
+  /* Submitting state: marching tactical line ticks across the bottom of the button. */
+  .signup.is-submitting .signup-btn{ pointer-events:none; }
+  .signup.is-submitting .signup-btn::after{
+    content:"";
+    position:absolute;
+    left:0; right:0; bottom:0;
+    height:2px;
+    background:var(--steel-800);
+    transform-origin:left;
+    animation:btn-march 900ms cubic-bezier(0.4, 0, 0.2, 1) infinite;
+    z-index:1;
+  }
+  @keyframes btn-march{
+    0%   { transform:scaleX(0); }
+    60%  { transform:scaleX(1); transform-origin:left; }
+    61%  { transform-origin:right; }
+    100% { transform:scaleX(0); transform-origin:right; }
+  }
   .signup-help{margin-top:var(--s2);font-family:var(--font-mono);font-size:10px;
     font-weight:500;letter-spacing:var(--track-label);text-transform:uppercase;
     color:var(--form-help);min-height:16px;line-height:1.5}
   .signup-help.is-error{color:var(--terra)}
 
-  .signup.is-done .signup-row,.signup.is-done .signup-help{display:none}
+  .signup.is-done .signup-row,
+  .signup.is-done .signup-help{display:none}
   .signup-done{display:none;flex-direction:column;gap:var(--s2)}
   .signup.is-done .signup-done{display:flex;animation:done-in 360ms var(--ease-quint)}
   .signup-done-headline{font-family:var(--font-sans);font-weight:900;
     font-size:clamp(28px, 4vw, 44px);line-height:0.92;letter-spacing:-0.03em;
     text-transform:uppercase;color:var(--done-text)}
   .signup-done-headline .accent{color:var(--terra)}
+  /* Per-character cascade reveal on the accent word. Each character locks in
+     with a flip-style scale + drop, staggered to rhyme with the timer's flip cascade
+     at the top of the page without requiring two competing flip mechanisms. */
+  .signup-done-headline .accent .ch{
+    display:inline-block;
+    opacity:0;
+    transform:translateY(-12px) scaleY(0.4);
+    animation:done-ch-in 460ms var(--ease-quint) forwards;
+    transform-origin:center center;
+  }
+  .signup-done-headline .accent .ch:nth-child(1){ animation-delay:120ms }
+  .signup-done-headline .accent .ch:nth-child(2){ animation-delay:230ms }
+  .signup-done-headline .accent .ch:nth-child(3){ animation-delay:340ms }
+  .signup-done-headline .accent .ch:nth-child(4){ animation-delay:450ms }
+  .signup-done-headline .accent .ch:nth-child(5){ animation-delay:560ms }
+  .signup-done-headline .accent .ch:nth-child(6){ animation-delay:670ms }
+  .signup-done-headline .accent .ch:nth-child(7){ animation-delay:780ms }
+  .signup-done-headline .accent .ch:nth-child(8){ animation-delay:890ms }
+  @keyframes done-ch-in{
+    0%   { opacity:0; transform:translateY(-12px) scaleY(0.35); }
+    55%  { opacity:1; transform:translateY(2px)   scaleY(1.08); }
+    100% { opacity:1; transform:translateY(0)     scaleY(1); }
+  }
   .signup-done-sub{font-size:14px;line-height:1.55;color:var(--done-sub);max-width:48ch}
+  /* Live-feed line under the success message — mono kicker styling that ties the
+     form's success state into the page's ticker vocabulary. */
+  .signup-done-feed{
+    margin-top:6px;
+    font-family:var(--font-mono);
+    font-size:11px;
+    font-weight:600;
+    letter-spacing:var(--track-label);
+    text-transform:uppercase;
+    color:var(--ticker-text);
+    display:inline-flex;
+    align-items:center;
+    gap:9px;
+    opacity:0;
+    animation:done-feed-in 320ms var(--ease-quint) 980ms forwards;
+  }
+  .signup-done-feed::before{
+    content:"";
+    width:7px;
+    height:7px;
+    border-radius:999px;
+    background:var(--terra);
+    animation:feed-pulse 1.8s ease-in-out infinite 980ms;
+  }
+  @keyframes done-feed-in{
+    from { opacity:0; transform:translateY(6px); }
+    to   { opacity:1; transform:translateY(0); }
+  }
+  @keyframes feed-pulse{
+    0%, 100% { opacity:0.55; }
+    50%      { opacity:1; }
+  }
   @keyframes done-in{
     from { opacity: 0; transform: translateY(10px); }
     to   { opacity: 1; transform: translateY(0); }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .signup.is-submitting .signup-btn::after{ animation:none; transform:scaleX(1); }
+    .signup-done-headline .accent .ch{ animation:none; opacity:1; transform:none; }
+    .signup-done-feed{ animation:none; opacity:1; transform:none; }
+    .signup-done-feed::before{ animation:none; opacity:1; }
   }
 
   /* ─── Stadium ticker (bottom strip, replaces footer) ──────── */
@@ -1829,11 +1930,12 @@
         </div>
         <div class="signup-done" id="signupDone" aria-live="polite">
           <div class="signup-done-headline">
-            <span data-i18n="successLine">YOU'RE</span> <span class="accent" data-i18n="successAccent">IN.</span>
+            <span data-i18n="successLine">YOU'RE</span> <span class="accent" id="signupDoneAccent" data-i18n="successAccent">IN.</span>
           </div>
           <div class="signup-done-sub" data-i18n="successSub">
             First whistle when SQUAD lands. Watch your inbox.
           </div>
+          <div class="signup-done-feed" data-i18n="successFeed">NEW PLAYER · LIVE NOW</div>
         </div>
       </form>
 
@@ -1878,6 +1980,7 @@
       successAccent:    'IN.',
       successSub:       'First whistle when SQUAD lands. Watch your inbox.',
       celebrate:        "YOU'RE IN.",
+      successFeed:      'NEW PLAYER · LIVE NOW',
       tickerMeta:        'LIVE FEED',
       footerMeta:       '© 2026 SQUAD INC.'
     },
@@ -1904,6 +2007,7 @@
       successAccent:    'СПИСКЕ.',
       successSub:       'Первый сигнал о запуске придет на почту.',
       celebrate:        'ВЫ В СПИСКЕ',
+      successFeed:      'НОВЫЙ ИГРОК · СЕЙЧАС',
       tickerMeta:        'ЖИВАЯ ЛЕНТА',
       footerMeta:       '© 2026 SQUAD INC.'
     },
@@ -1930,6 +2034,7 @@
       successAccent:    'YERİN VAR.',
       successSub:       'SQUAD açılan kimi ilk siqnal poçtuna gələcək.',
       celebrate:        'YERİN VAR',
+      successFeed:      'YENİ OYUNÇU · CANLIDIR',
       tickerMeta:        'CANLI',
       footerMeta:       '© 2026 SQUAD INC.'
     }
@@ -2575,6 +2680,15 @@
   const submitBtn = form.querySelector('.signup-btn');
   const hpInput = form.querySelector('input[name="hp"]');
 
+  /* The .signup.is-valid class arms the button (deep-terracotta inset hairline)
+     when the email passes the regex. Tracked here as the only piece of state the
+     form needs from the input — the rest of the typing UX is purely visual via
+     the chalk circle + whistle cue, which run on independent CSS timelines. */
+  function updateValidState(v) {
+    form.classList.toggle('is-valid', EMAIL_RE.test(v));
+  }
+
+  /* ─── Submit ────────────────────────────────────────────── */
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     const dict = STRINGS[currentLang];
@@ -2599,6 +2713,7 @@
     }
 
     submitBtn.disabled = true;
+    form.classList.add('is-submitting');
     help.classList.remove('is-error');
 
     try {
@@ -2624,6 +2739,7 @@
         help.textContent = dict.emailErrorServer;
         help.classList.add('is-error');
         submitBtn.disabled = false;
+        form.classList.remove('is-submitting');
         if (turnstileWidgetId !== null && window.turnstile) {
           window.turnstile.reset(turnstileWidgetId);
         }
@@ -2634,20 +2750,45 @@
       help.textContent = dict.emailErrorServer;
       help.classList.add('is-error');
       submitBtn.disabled = false;
+      form.classList.remove('is-submitting');
       if (turnstileWidgetId !== null && window.turnstile) {
         window.turnstile.reset(turnstileWidgetId);
       }
     }
   });
 
+  /* ─── Input listener: arm the button when valid, clear errors on edit ─── */
   input.addEventListener('input', () => {
+    const v = (input.value || '').trim();
+    updateValidState(v);
     if (help.classList.contains('is-error')) {
       help.classList.remove('is-error');
       help.textContent = STRINGS[currentLang].emailHelp;
     }
   });
 
+  /* ─── Success: celebrate + transition to done ────────────── */
+  function wrapAccentForCascade() {
+    /* Split the success accent ("IN." / "СПИСКЕ." / "YERİN VAR.") into per-char spans
+       so each character can lock in with a staggered cascade. Done at success time
+       (not at boot) so applyLanguage's innerHTML rewrites don't fight the wrapping. */
+    const el = document.getElementById('signupDoneAccent');
+    if (!el) return;
+    const text = (el.textContent || '').trim();
+    el.innerHTML = '';
+    Array.from(text).forEach((ch, i) => {
+      const span = document.createElement('span');
+      span.className = 'ch';
+      span.textContent = ch === ' ' ? ' ' : ch;
+      /* Override the static CSS nth-child delays so locales with longer accents
+         (AZ "YERİN VAR." = 9 chars) cascade smoothly past the 8-char fallback. */
+      span.style.animationDelay = (120 + i * 110) + 'ms';
+      el.appendChild(span);
+    });
+  }
+
   function celebrateThenLand() {
+    form.classList.remove('is-submitting');
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (reduced) {
       form.classList.add('is-done');
@@ -2658,6 +2799,7 @@
     const dict = STRINGS[currentLang];
     runFlip(dict.celebrate || dict.comingSoon);
     setTimeout(() => {
+      wrapAccentForCascade();
       form.classList.add('is-done');
       help.classList.remove('is-error');
     }, 1700);
