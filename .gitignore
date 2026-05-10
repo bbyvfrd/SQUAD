@@ -16,3 +16,7 @@ node_modules/
 coverage/
 dist/
 .playwright-mcp/
+# Screenshot debug output at repo root (Playwright save paths land here)
+/*.jpeg
+/*.jpg
+/*.png
