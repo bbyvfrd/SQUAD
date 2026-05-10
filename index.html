@@ -2505,8 +2505,16 @@
   const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   let turnstileWidgetId = null;
+  let turnstileLoadFailed = false;
+  let turnstileLoadAttempts = 0;
+  const TURNSTILE_MAX_ATTEMPTS = 25; // 25 × 200ms = 5s
   function renderTurnstile() {
     if (typeof window.turnstile === 'undefined') {
+      turnstileLoadAttempts++;
+      if (turnstileLoadAttempts >= TURNSTILE_MAX_ATTEMPTS) {
+        turnstileLoadFailed = true;
+        return;
+      }
       setTimeout(renderTurnstile, 200);
       return;
     }
@@ -2535,6 +2543,12 @@
       help.textContent = dict.emailErrorBad;
       help.classList.add('is-error');
       input.focus();
+      return;
+    }
+
+    if (turnstileLoadFailed) {
+      help.textContent = dict.emailErrorServer;
+      help.classList.add('is-error');
       return;
     }
 
