@@ -42,7 +42,28 @@
       document.documentElement.dataset.theme = 'dark';
     }
   } catch (_) {}
-</script><link rel="preconnect" href="https://fonts.googleapis.com">
+</script>
+<script>
+  try {
+    var SUPPORTED = ['en','ru','az'];
+    var stored = localStorage.getItem('squad-lang');
+    var lang = SUPPORTED.indexOf(stored) !== -1 ? stored : null;
+    if (!lang) {
+      var prefs = (navigator.languages && navigator.languages.length)
+        ? navigator.languages
+        : [navigator.language || 'en'];
+      for (var i = 0; i < prefs.length && !lang; i++) {
+        var p = String(prefs[i]).toLowerCase();
+        for (var j = 0; j < SUPPORTED.length; j++) {
+          if (p.indexOf(SUPPORTED[j]) === 0) { lang = SUPPORTED[j]; break; }
+        }
+      }
+      if (!lang) lang = 'en';
+    }
+    document.documentElement.setAttribute('lang', lang);
+  } catch (_) {}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@100..900&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
 <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
@@ -2274,6 +2295,7 @@
   const langCurrent = document.getElementById('langCurrent');
   const playerSlots = Array.from(document.querySelectorAll('.player-slot'));
   const THEME_KEY = 'squad-theme';
+  const LANG_KEY = 'squad-lang';
   let boardIndex = 0;
   let boardTimer = null;
   let boardCyclePaused = false;
@@ -2315,11 +2337,14 @@
     });
   }
 
-  function applyLanguage(lang) {
+  function applyLanguage(lang, shouldPersist = false) {
     if (!STRINGS[lang]) return;
     currentLang = lang;
     const dict = STRINGS[lang];
     html.setAttribute('lang', lang);
+    if (shouldPersist) {
+      try { localStorage.setItem(LANG_KEY, lang); } catch (_) {}
+    }
 
     document.querySelectorAll('[data-i18n]').forEach(el => {
       const key = el.getAttribute('data-i18n');
@@ -2370,7 +2395,7 @@
 
   document.querySelectorAll('.lang-option').forEach(b => {
     b.addEventListener('click', () => {
-      applyLanguage(b.getAttribute('data-lang'));
+      applyLanguage(b.getAttribute('data-lang'), true);
       closeLangMenu();
       if (langTrigger) langTrigger.focus();
     });
