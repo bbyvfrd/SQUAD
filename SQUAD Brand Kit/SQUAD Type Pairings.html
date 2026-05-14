@@ -1,0 +1,533 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>SQUAD — Type Pairing Studies (Strong Sans · v2)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;700;900&family=Inter+Tight:wght@400;500;700;900&family=Source+Sans+3:wght@400;500;700;900&family=Russo+One&family=Nunito:wght@400;500;700;900&family=Inter:wght@400;500;700&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  /* ─── Tokens (LOCKED — do not alter colors or logo) ──────── */
+  :root{
+    --terracotta:#EE4721;
+    --terracotta-light:#F26B49;
+    --terracotta-deep:#C5371A;
+    --jet:#13222C;
+    --navy:#1D3444;
+    --slate:#BEC4CE;
+    --linen:#EBE7DB;
+    --bone:#F5F2E9;
+    --hairline:rgba(19,34,44,.12);
+    --smoke:#3A4550;
+    --ash:#6B7480;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--linen);color:var(--jet);font-family:'Inter',sans-serif;-webkit-font-smoothing:antialiased}
+  .page{width:1500px;margin:0 auto}
+
+  /* ─── Mono discipline: two voices only ─────────────────────
+     mono-label  — 11px / 500 / 0.16em — in-card data, captions
+     mono-kicker — 12px / 600 / 0.22em — eyebrows, signage, badges
+     ────────────────────────────────────────────────────────── */
+  .mono-label,.spec-label,.stat .lbl,.pair-stack,.pair-side,.lock-label,.tri-script{
+    font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500;
+    letter-spacing:.16em;text-transform:uppercase;line-height:1.7
+  }
+  .mono-kicker,.meta-row,.hero .kicker,.hero .badge,.tri-label{
+    font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;
+    letter-spacing:.22em;text-transform:uppercase;line-height:1.7
+  }
+
+  /* ─── Page chrome ────────────────────────────────────────── */
+  .meta-row{display:flex;justify-content:space-between;align-items:center;padding:48px 64px 24px;color:var(--ash)}
+  .meta-row .squad{display:flex;align-items:center;gap:12px}
+  .meta-row .squad img{width:28px;height:28px;object-fit:contain}
+
+  /* ─── Cover ──────────────────────────────────────────────── */
+  .intro{padding:0 64px 80px;border-bottom:1px solid var(--hairline)}
+  .intro h1{margin:0;font-family:'Inter Tight',sans-serif;font-weight:900;font-size:272px;line-height:.82;letter-spacing:-.04em;color:var(--jet);text-transform:uppercase}
+  .intro h1 .accent{color:var(--terracotta)}
+  .intro .lede{margin-top:48px;max-width:880px;font-family:'Inter',sans-serif;font-size:24px;line-height:1.5;color:var(--smoke);font-weight:500}
+  .intro .lede strong{color:var(--jet);font-weight:700}
+
+  /* ─── Pairing card ───────────────────────────────────────── */
+  .pair{position:relative;padding:120px 64px 140px;border-bottom:1px solid var(--hairline)}
+  .pair-head{display:grid;grid-template-columns:120px 1fr auto;gap:32px;align-items:start;margin-bottom:56px}
+  .pair-num{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:68px;line-height:.85;color:var(--terracotta);letter-spacing:-.04em}
+  .pair-title{font-family:'Inter',sans-serif;font-weight:800;font-size:34px;letter-spacing:-.02em;color:var(--jet);margin:0;line-height:1.1}
+  .pair-stack{margin-top:14px;color:var(--ash)}
+  .pair-stack span{color:var(--terracotta-deep);font-weight:500}
+  .pair-side{color:var(--ash);text-align:right;max-width:160px}
+
+  /* ─── Hero card ──────────────────────────────────────────── */
+  .hero{position:relative;background:var(--jet);color:var(--linen);border-radius:6px;padding:96px 80px;overflow:hidden;box-shadow:0 2px 6px rgba(0,0,0,.08),0 12px 40px rgba(0,0,0,.08)}
+  .hero .badge{position:absolute;top:32px;right:32px;background:var(--terracotta);color:var(--linen);padding:10px 16px;border-radius:4px}
+  .hero .kicker{color:var(--terracotta);margin-bottom:32px}
+  .hero .display{margin:0;line-height:.82;letter-spacing:-.04em;text-transform:uppercase;font-weight:900;font-size:272px}
+  .hero .display .accent{color:var(--terracotta)}
+  .hero .sub{margin-top:56px;max-width:65ch;font-size:24px;line-height:1.5;color:#C9CCD2;font-weight:400}
+  .hero .sub strong{color:var(--linen);font-weight:700}
+
+  /* ─── Lockup harmony row ──────────────────────────────────
+     The brand mark is locked. This row shows how each pairing's
+     letterforms sit next to the existing logomark and lockup.
+     ────────────────────────────────────────────────────────── */
+  .lockup-row{margin-top:32px;background:var(--linen);border:1px solid var(--hairline);border-radius:6px;padding:64px 56px;display:grid;grid-template-columns:1fr 1.2fr 1fr;align-items:center;gap:48px}
+  .lock-item{display:flex;flex-direction:column;align-items:center;gap:18px;text-align:center}
+  .logomark-img{height:140px;width:auto;display:block}
+  .lockup-img{height:88px;width:auto;display:block}
+  .lock-typeset{font-weight:900;font-size:140px;line-height:1;letter-spacing:-.04em;color:var(--jet);text-transform:uppercase}
+  .lock-typeset .accent{color:var(--terracotta)}
+  .lock-label{color:var(--ash)}
+  .lock-divider{width:1px;background:var(--hairline);justify-self:center;height:140px}
+
+  /* ─── Specimens ──────────────────────────────────────────── */
+  .specimen{display:grid;grid-template-columns:1.15fr 1fr;gap:32px;margin-top:32px}
+  .spec-block{background:var(--bone);border-radius:6px;padding:56px;min-height:380px;display:flex;flex-direction:column;justify-content:space-between}
+  .spec-block.dark{background:var(--navy);color:var(--linen)}
+  .spec-block.terracotta{background:var(--terracotta);color:var(--linen)}
+  .spec-label{color:var(--ash)}
+  .dark .spec-label{color:var(--slate)}
+  .terracotta .spec-label{color:rgba(235,231,219,.8)}
+  .spec-h2{margin:24px 0 0;line-height:.88;letter-spacing:-.035em;text-transform:uppercase;font-weight:900;font-size:96px}
+  .spec-h2 .accent{color:var(--terracotta)}
+  .dark .spec-h2 .accent{color:var(--terracotta-light)}
+  .terracotta .spec-h2 .accent{color:var(--jet)}
+  .spec-body{margin-top:32px;font-size:17px;line-height:1.6;color:var(--smoke);max-width:65ch;font-weight:400}
+  .dark .spec-body{color:#C9CCD2}
+  .terracotta .spec-body{color:rgba(235,231,219,.92)}
+  .spec-body strong{font-weight:700}
+
+  /* ─── Stat block ─────────────────────────────────────────── */
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:32px}
+  .stat{background:var(--terracotta);color:var(--linen);border-radius:6px;padding:48px 40px}
+  .stat .num{margin:0;line-height:.82;letter-spacing:-.04em;font-weight:900;font-size:96px}
+  .stat .lbl{margin-top:24px}
+  .stat:nth-child(2){background:var(--jet);color:var(--linen)}
+  .stat:nth-child(3){background:var(--bone);color:var(--jet)}
+
+  /* ─── Alphabet showcase ──────────────────────────────────── */
+  .alpha{margin-top:32px;background:var(--linen);border:1px solid var(--hairline);border-radius:6px;padding:48px 56px;display:flex;justify-content:space-between;align-items:baseline;gap:24px}
+  .alpha .glyph{font-weight:900;font-size:192px;line-height:.85;letter-spacing:-.04em;color:var(--jet)}
+  .alpha .glyph.accent{color:var(--terracotta)}
+  .alpha .glyph.outline{color:transparent;-webkit-text-stroke:3px var(--jet)}
+
+  /* ─── Trilingual specimen (EN / AZ / RU) ─────────────────── */
+  .trilingual{margin-top:32px;background:var(--bone);border:1px solid var(--hairline);border-radius:6px;padding:56px}
+  .tri-label{color:var(--terracotta-deep);margin-bottom:32px;display:flex;justify-content:space-between;align-items:center}
+  .tri-label .right{color:var(--ash);font-weight:500;letter-spacing:.16em}
+  .tri-stack{display:flex;flex-direction:column;gap:18px}
+  .tri-line{font-weight:900;line-height:.95;letter-spacing:-.025em;font-size:64px;color:var(--jet);text-transform:uppercase}
+  .tri-line .accent{color:var(--terracotta)}
+  .tri-script{display:inline-block;min-width:48px;margin-right:24px;color:var(--ash);transform:translateY(-12px)}
+
+  /* ═══════════════════════════════════════════════════════════
+     Per-pairing font assignment.
+     Sizes locked across pairings — only the family changes so
+     the comparison is honest. Spike is COLOR ONLY (terracotta);
+     italic axis is dropped because cross-language italic at black
+     weight is unreliable on Google Fonts for these candidates.
+     ═══════════════════════════════════════════════════════════ */
+
+  /* PAIRING 1 — Onest (Modern Humanist) */
+  .p1 .display, .p1 .spec-h2, .p1 .stat .num, .p1 .alpha .glyph, .p1 .tri-line, .p1 .lock-typeset{font-family:'Onest',sans-serif;font-weight:900}
+  .p1 .hero .sub, .p1 .spec-body, .p1 .pair-title{font-family:'Onest',sans-serif}
+
+  /* PAIRING 2 — Inter Tight (Sharp Grotesque) */
+  .p2 .display, .p2 .spec-h2, .p2 .stat .num, .p2 .alpha .glyph, .p2 .tri-line, .p2 .lock-typeset{font-family:'Inter Tight',sans-serif;font-weight:900}
+  .p2 .hero .sub, .p2 .spec-body, .p2 .pair-title{font-family:'Inter Tight',sans-serif}
+
+  /* PAIRING 3 — Source Sans 3 (Workhorse) */
+  .p3 .display, .p3 .spec-h2, .p3 .stat .num, .p3 .alpha .glyph, .p3 .tri-line, .p3 .lock-typeset{font-family:'Source Sans 3',sans-serif;font-weight:900}
+  .p3 .hero .sub, .p3 .spec-body, .p3 .pair-title{font-family:'Source Sans 3',sans-serif}
+
+  /* PAIRING 4 — Russo One (Display Heavyweight, single weight) */
+  .p4 .display, .p4 .spec-h2, .p4 .stat .num, .p4 .alpha .glyph, .p4 .tri-line, .p4 .lock-typeset{font-family:'Russo One',sans-serif;font-weight:400}
+  .p4 .hero .sub, .p4 .spec-body, .p4 .pair-title{font-family:'Inter',sans-serif}
+
+  /* PAIRING 5 — Nunito (Friendly Heavy) */
+  .p5 .display, .p5 .spec-h2, .p5 .stat .num, .p5 .alpha .glyph, .p5 .tri-line, .p5 .lock-typeset{font-family:'Nunito',sans-serif;font-weight:900}
+  .p5 .hero .sub, .p5 .spec-body, .p5 .pair-title{font-family:'Nunito',sans-serif}
+
+  .footer{padding:80px 64px;text-align:center;color:var(--ash);font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;letter-spacing:.22em;text-transform:uppercase}
+  .footer img{width:36px;height:36px;display:block;margin:0 auto 20px;opacity:.55}
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- Cover -->
+  <header class="meta-row">
+    <div class="squad"><img src="assets/squad_logomark.png" alt="SQUAD"><span>SQUAD &nbsp;/&nbsp; Brand Studies</span></div>
+    <div>Type Pairings · Strong Sans · v2 · 2026.05</div>
+  </header>
+
+  <section class="intro">
+    <h1>BUILT<br><span class="accent">STRONG</span>.</h1>
+    <p class="lede">
+      Five heavy sans-serif systems. Every candidate verified for <strong>Azerbaijani diacritics</strong>
+      (ə, ç, ğ, ı, İ, ö, ş, ü), <strong>Cyrillic</strong>, and Latin Extended at the heaviest weight available.
+      Italic axis dropped: pan-language italic at black weight is unreliable on Google Fonts. The
+      <strong>spike is color</strong> now. One word in terracotta. Everything else in jet ink. Weight stays at full chunk.
+    </p>
+  </section>
+
+  <!-- ===================== PAIRING 1 — ONEST ===================== -->
+  <section class="pair p1">
+    <div class="pair-head">
+      <div class="pair-num">01</div>
+      <div>
+        <h2 class="pair-title">Onest</h2>
+        <div class="pair-stack">Display: <span>Onest 900</span><br>Body: <span>Onest 400 / 500</span> &nbsp;·&nbsp; Mono: <span>JetBrains Mono</span></div>
+      </div>
+      <div class="pair-side">Modern humanist<br>warm authority</div>
+    </div>
+
+    <div class="hero">
+      <div class="badge">MODERN HUMANIST</div>
+      <div class="kicker">Specimen 01 · Onest 900</div>
+      <h3 class="display">PLAY<br><span class="accent">HARD</span>.</h3>
+      <p class="sub">Onest is the <strong>workhorse with character</strong>. Open counters, slight humanist warmth, full pan-language coverage. At 900 it lands hard without going industrial. The brand voice when SQUAD is being a teammate: present, reliable, never robotic.</p>
+    </div>
+
+    <div class="lockup-row">
+      <div class="lock-item">
+        <img class="logomark-img" src="assets/squad_logomark.png" alt="SQUAD logomark">
+        <div class="lock-label">LOGOMARK · LOCKED</div>
+      </div>
+      <div class="lock-item">
+        <img class="lockup-img" src="assets/squad_logo_transparent_2.png" alt="SQUAD horizontal lockup">
+        <div class="lock-label">HORIZONTAL LOCKUP · LOCKED</div>
+      </div>
+      <div class="lock-item">
+        <div class="lock-typeset">SQUAD</div>
+        <div class="lock-label">TYPESET · ONEST 900</div>
+      </div>
+    </div>
+
+    <div class="alpha">
+      <div class="glyph">A</div>
+      <div class="glyph accent">G</div>
+      <div class="glyph">Q</div>
+      <div class="glyph">R</div>
+      <div class="glyph outline">&amp;</div>
+    </div>
+
+    <div class="trilingual">
+      <div class="tri-label"><span>TRILINGUAL TEST · EN / AZ / RU</span><span class="right">PASS GATE: ə + Ş + Й MUST RENDER AT 900</span></div>
+      <div class="tri-stack">
+        <div class="tri-line"><span class="tri-script">EN</span>FIND YOUR <span class="accent">GAME</span>.</div>
+        <div class="tri-line"><span class="tri-script">AZ</span>ÖZ <span class="accent">DƏSTƏNİ</span> TAP. ŞƏHƏRDƏ OYNA.</div>
+        <div class="tri-line"><span class="tri-script">RU</span>НАЙДИ <span class="accent">СВОЮ</span> КОМАНДУ. ИГРАЙ СЕГОДНЯ.</div>
+      </div>
+    </div>
+
+    <div class="specimen">
+      <div class="spec-block">
+        <div class="spec-label">H2 · Editorial headline</div>
+        <h4 class="spec-h2">RUN IT<br><span class="accent">BACK</span>.</h4>
+        <p class="spec-body">Onest's body weights are screen-tuned: <strong>17px reads clean</strong>, larger sizes have presence without aggression. Strong workhorse pick for a brand that wants character without a costume.</p>
+      </div>
+      <div class="spec-block dark">
+        <div class="spec-label">Pull quote · dark</div>
+        <h4 class="spec-h2" style="font-size:64px">"NO BENCH.<br><span class="accent">ALL FRONT.</span>"</h4>
+        <p class="spec-body" style="margin-top:20px">Team manifesto, draft 02.</p>
+      </div>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><h5 class="num">92<span class="accent">%</span></h5><div class="lbl">Win rate</div></div>
+      <div class="stat"><h5 class="num">14s</h5><div class="lbl">Avg break</div></div>
+      <div class="stat"><h5 class="num">03</h5><div class="lbl">Trophies</div></div>
+    </div>
+  </section>
+
+  <!-- ===================== PAIRING 2 — INTER TIGHT ===================== -->
+  <section class="pair p2">
+    <div class="pair-head">
+      <div class="pair-num">02</div>
+      <div>
+        <h2 class="pair-title">Inter Tight</h2>
+        <div class="pair-stack">Display: <span>Inter Tight 900</span><br>Body: <span>Inter Tight 400 / 500</span> &nbsp;·&nbsp; Mono: <span>JetBrains Mono</span></div>
+      </div>
+      <div class="pair-side">Sharp grotesque<br>technical precision</div>
+    </div>
+
+    <div class="hero">
+      <div class="badge">SHARP GROTESK</div>
+      <div class="kicker">Specimen 02 · Inter Tight 900</div>
+      <h3 class="display">GAME<br><span class="accent">ON</span>.</h3>
+      <p class="sub">Inter Tight is Inter <strong>with the slack pulled out</strong>. Tighter spacing, sharper terminals, denser at the same weight. Reads as engineered. Best for the product side: dashboards, scores, fixture lists, anything that benefits from precision.</p>
+    </div>
+
+    <div class="lockup-row">
+      <div class="lock-item">
+        <img class="logomark-img" src="assets/squad_logomark.png" alt="SQUAD logomark">
+        <div class="lock-label">LOGOMARK · LOCKED</div>
+      </div>
+      <div class="lock-item">
+        <img class="lockup-img" src="assets/squad_logo_transparent_2.png" alt="SQUAD horizontal lockup">
+        <div class="lock-label">HORIZONTAL LOCKUP · LOCKED</div>
+      </div>
+      <div class="lock-item">
+        <div class="lock-typeset">SQUAD</div>
+        <div class="lock-label">TYPESET · INTER TIGHT 900</div>
+      </div>
+    </div>
+
+    <div class="alpha">
+      <div class="glyph">B</div>
+      <div class="glyph">M</div>
+      <div class="glyph accent">O</div>
+      <div class="glyph">W</div>
+      <div class="glyph outline">@</div>
+    </div>
+
+    <div class="trilingual">
+      <div class="tri-label"><span>TRILINGUAL TEST · EN / AZ / RU</span><span class="right">PASS GATE: ə + Ş + Й MUST RENDER AT 900</span></div>
+      <div class="tri-stack">
+        <div class="tri-line"><span class="tri-script">EN</span>FIND YOUR <span class="accent">GAME</span>.</div>
+        <div class="tri-line"><span class="tri-script">AZ</span>ÖZ <span class="accent">DƏSTƏNİ</span> TAP. ŞƏHƏRDƏ OYNA.</div>
+        <div class="tri-line"><span class="tri-script">RU</span>НАЙДИ <span class="accent">СВОЮ</span> КОМАНДУ. ИГРАЙ СЕГОДНЯ.</div>
+      </div>
+    </div>
+
+    <div class="specimen">
+      <div class="spec-block">
+        <div class="spec-label">H2 · Product headline</div>
+        <h4 class="spec-h2">FORM<br>THE <span class="accent">WALL</span>.</h4>
+        <p class="spec-body">A tight grotesque carries data <strong>without warmth getting in the way</strong>. Where Onest is the teammate, Inter Tight is the analyst. Best for fixture cards, score tables, push-notification copy.</p>
+      </div>
+      <div class="spec-block terracotta">
+        <div class="spec-label">Hero card · brand</div>
+        <h4 class="spec-h2" style="font-size:72px">A SQUAD<br><span class="accent">HOLDS</span>.</h4>
+        <p class="spec-body" style="margin-top:20px">Move together. Hold the line.</p>
+      </div>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><h5 class="num">11<span class="accent">k</span></h5><div class="lbl">Members</div></div>
+      <div class="stat"><h5 class="num">48</h5><div class="lbl">Cities</div></div>
+      <div class="stat"><h5 class="num">1<span class="accent">st</span></h5><div class="lbl">Place</div></div>
+    </div>
+  </section>
+
+  <!-- ===================== PAIRING 3 — SOURCE SANS 3 ===================== -->
+  <section class="pair p3">
+    <div class="pair-head">
+      <div class="pair-num">03</div>
+      <div>
+        <h2 class="pair-title">Source Sans 3</h2>
+        <div class="pair-stack">Display: <span>Source Sans 3 900</span><br>Body: <span>Source Sans 3 400 / 500</span> &nbsp;·&nbsp; Mono: <span>JetBrains Mono</span></div>
+      </div>
+      <div class="pair-side">Workhorse<br>broad shoulders</div>
+    </div>
+
+    <div class="hero">
+      <div class="badge">WORKHORSE</div>
+      <div class="kicker">Specimen 03 · Source Sans 3 / 900</div>
+      <h3 class="display">PRESS<br>THE <span class="accent">PACE</span>.</h3>
+      <p class="sub">Adobe's open-source workhorse, taken to <strong>weight 900</strong>. Slightly humanist, broad-shouldered, neutral but not faceless. Used at scale by NASA, USGS, Bloomberg. The "this will not flake" pick.</p>
+    </div>
+
+    <div class="lockup-row">
+      <div class="lock-item">
+        <img class="logomark-img" src="assets/squad_logomark.png" alt="SQUAD logomark">
+        <div class="lock-label">LOGOMARK · LOCKED</div>
+      </div>
+      <div class="lock-item">
+        <img class="lockup-img" src="assets/squad_logo_transparent_2.png" alt="SQUAD horizontal lockup">
+        <div class="lock-label">HORIZONTAL LOCKUP · LOCKED</div>
+      </div>
+      <div class="lock-item">
+        <div class="lock-typeset">SQUAD</div>
+        <div class="lock-label">TYPESET · SOURCE SANS 3 / 900</div>
+      </div>
+    </div>
+
+    <div class="alpha">
+      <div class="glyph">D</div>
+      <div class="glyph">N</div>
+      <div class="glyph accent">S</div>
+      <div class="glyph">U</div>
+      <div class="glyph outline">!</div>
+    </div>
+
+    <div class="trilingual">
+      <div class="tri-label"><span>TRILINGUAL TEST · EN / AZ / RU</span><span class="right">PASS GATE: ə + Ş + Й MUST RENDER AT 900</span></div>
+      <div class="tri-stack">
+        <div class="tri-line"><span class="tri-script">EN</span>FIND YOUR <span class="accent">GAME</span>.</div>
+        <div class="tri-line"><span class="tri-script">AZ</span>ÖZ <span class="accent">DƏSTƏNİ</span> TAP. ŞƏHƏRDƏ OYNA.</div>
+        <div class="tri-line"><span class="tri-script">RU</span>НАЙДИ <span class="accent">СВОЮ</span> КОМАНДУ. ИГРАЙ СЕГОДНЯ.</div>
+      </div>
+    </div>
+
+    <div class="specimen">
+      <div class="spec-block">
+        <div class="spec-label">H2 · Product headline</div>
+        <h4 class="spec-h2">METRICS<br>THAT <span class="accent">HIT</span>.</h4>
+        <p class="spec-body">Source Sans 3 has the broadest character set of the candidates. Pan-language coverage is <strong>institutional-grade</strong>. Reads calm in body, lands hard at 900. The "reliable utility" pick if SQUAD wants to feel like infrastructure.</p>
+      </div>
+      <div class="spec-block dark">
+        <div class="spec-label">Stat card · dark</div>
+        <h4 class="spec-h2" style="font-size:72px">3.2<span class="accent">×</span><br>FASTER</h4>
+        <p class="spec-body" style="margin-top:20px">Versus last quarter, measured at the line.</p>
+      </div>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><h5 class="num">240</h5><div class="lbl">BPM avg</div></div>
+      <div class="stat"><h5 class="num">06<span class="accent">:</span>42</h5><div class="lbl">Pace</div></div>
+      <div class="stat"><h5 class="num"><span class="accent">+</span>18</h5><div class="lbl">Δ vs Q1</div></div>
+    </div>
+  </section>
+
+  <!-- ===================== PAIRING 4 — RUSSO ONE ===================== -->
+  <section class="pair p4">
+    <div class="pair-head">
+      <div class="pair-num">04</div>
+      <div>
+        <h2 class="pair-title">Russo One</h2>
+        <div class="pair-stack">Display: <span>Russo One 400 (single weight)</span><br>Body: <span>Inter 400 / 500</span> &nbsp;·&nbsp; Mono: <span>JetBrains Mono</span></div>
+      </div>
+      <div class="pair-side">Display heavyweight<br>Cyrillic-native block</div>
+    </div>
+
+    <div class="hero">
+      <div class="badge">CARVED FROM STONE</div>
+      <div class="kicker">Specimen 04 · Russo One</div>
+      <h3 class="display">SHOW<br><span class="accent">UP</span>.</h3>
+      <p class="sub">Russo One is a <strong>Cyrillic-first display font</strong>. Designed by Jovanny Lemonad with Russian as the home script. The Latin glyphs match the weight and structure of the Cyrillic exactly. Single weight, but feels carved out of granite. Use only in display, never in body.</p>
+    </div>
+
+    <div class="lockup-row">
+      <div class="lock-item">
+        <img class="logomark-img" src="assets/squad_logomark.png" alt="SQUAD logomark">
+        <div class="lock-label">LOGOMARK · LOCKED</div>
+      </div>
+      <div class="lock-item">
+        <img class="lockup-img" src="assets/squad_logo_transparent_2.png" alt="SQUAD horizontal lockup">
+        <div class="lock-label">HORIZONTAL LOCKUP · LOCKED</div>
+      </div>
+      <div class="lock-item">
+        <div class="lock-typeset">SQUAD</div>
+        <div class="lock-label">TYPESET · RUSSO ONE</div>
+      </div>
+    </div>
+
+    <div class="alpha">
+      <div class="glyph">E</div>
+      <div class="glyph">K</div>
+      <div class="glyph accent">P</div>
+      <div class="glyph">Z</div>
+      <div class="glyph outline">/</div>
+    </div>
+
+    <div class="trilingual">
+      <div class="tri-label"><span>TRILINGUAL TEST · EN / AZ / RU</span><span class="right">PASS GATE: ə + Ş + Й MUST RENDER AT NATIVE WEIGHT</span></div>
+      <div class="tri-stack">
+        <div class="tri-line"><span class="tri-script">EN</span>FIND YOUR <span class="accent">GAME</span>.</div>
+        <div class="tri-line"><span class="tri-script">AZ</span>ÖZ <span class="accent">DƏSTƏNİ</span> TAP. ŞƏHƏRDƏ OYNA.</div>
+        <div class="tri-line"><span class="tri-script">RU</span>НАЙДИ <span class="accent">СВОЮ</span> КОМАНДУ. ИГРАЙ СЕГОДНЯ.</div>
+      </div>
+    </div>
+
+    <div class="specimen">
+      <div class="spec-block">
+        <div class="spec-label">H2 · Display headline</div>
+        <h4 class="spec-h2">FROM THE<br><span class="accent">SIDELINE</span>.</h4>
+        <p class="spec-body">Russo One has <strong>only one weight</strong>. That is its limit and its strength. There is no body voice here. Pair it with Inter for everything below the headline. Best when the brand wants the display tier to feel <strong>monumental</strong>.</p>
+      </div>
+      <div class="spec-block dark">
+        <div class="spec-label">Score graphic · dark</div>
+        <h4 class="spec-h2" style="font-size:80px">SQD <span class="accent">3</span><br>OPP <span class="accent">1</span></h4>
+        <p class="spec-body" style="margin-top:20px">FT, home win, 24.04.</p>
+      </div>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><h5 class="num">21<span class="accent">'</span></h5><div class="lbl">Goal</div></div>
+      <div class="stat"><h5 class="num">67<span class="accent">'</span></h5><div class="lbl">Assist</div></div>
+      <div class="stat"><h5 class="num">89<span class="accent">'</span></h5><div class="lbl">Final</div></div>
+    </div>
+  </section>
+
+  <!-- ===================== PAIRING 5 — NUNITO ===================== -->
+  <section class="pair p5">
+    <div class="pair-head">
+      <div class="pair-num">05</div>
+      <div>
+        <h2 class="pair-title">Nunito</h2>
+        <div class="pair-stack">Display: <span>Nunito 900</span><br>Body: <span>Nunito 400 / 500</span> &nbsp;·&nbsp; Mono: <span>JetBrains Mono</span></div>
+      </div>
+      <div class="pair-side">Friendly heavy<br>community-warm</div>
+    </div>
+
+    <div class="hero">
+      <div class="badge">FRIENDLY HEAVY</div>
+      <div class="kicker">Specimen 05 · Nunito 900</div>
+      <h3 class="display">ONE CREW.<br>ONE <span class="accent">SHIFT</span>.</h3>
+      <p class="sub">Nunito is the <strong>warmest of the chunky options</strong>. Rounded terminals, generous counters, friendly weight curve. At 900 it stays heavy without sharpening into industrial. Best for the member side of SQUAD: profiles, rosters, post-game wrap-ups.</p>
+    </div>
+
+    <div class="lockup-row">
+      <div class="lock-item">
+        <img class="logomark-img" src="assets/squad_logomark.png" alt="SQUAD logomark">
+        <div class="lock-label">LOGOMARK · LOCKED</div>
+      </div>
+      <div class="lock-item">
+        <img class="lockup-img" src="assets/squad_logo_transparent_2.png" alt="SQUAD horizontal lockup">
+        <div class="lock-label">HORIZONTAL LOCKUP · LOCKED</div>
+      </div>
+      <div class="lock-item">
+        <div class="lock-typeset">SQUAD</div>
+        <div class="lock-label">TYPESET · NUNITO 900</div>
+      </div>
+    </div>
+
+    <div class="alpha">
+      <div class="glyph">F</div>
+      <div class="glyph">I</div>
+      <div class="glyph accent">L</div>
+      <div class="glyph">Y</div>
+      <div class="glyph outline">?</div>
+    </div>
+
+    <div class="trilingual">
+      <div class="tri-label"><span>TRILINGUAL TEST · EN / AZ / RU</span><span class="right">PASS GATE: ə + Ş + Й MUST RENDER AT 900</span></div>
+      <div class="tri-stack">
+        <div class="tri-line"><span class="tri-script">EN</span>FIND YOUR <span class="accent">GAME</span>.</div>
+        <div class="tri-line"><span class="tri-script">AZ</span>ÖZ <span class="accent">DƏSTƏNİ</span> TAP. ŞƏHƏRDƏ OYNA.</div>
+        <div class="tri-line"><span class="tri-script">RU</span>НАЙДИ <span class="accent">СВОЮ</span> КОМАНДУ. ИГРАЙ СЕГОДНЯ.</div>
+      </div>
+    </div>
+
+    <div class="specimen">
+      <div class="spec-block">
+        <div class="spec-label">H2 · Editorial headline</div>
+        <h4 class="spec-h2">TIGHT<br><span class="accent">FORMATION</span>.</h4>
+        <p class="spec-body">Nunito is built for screen and mobile: <strong>large x-height, generous spacing</strong>. The black weight stays warm, never aggressive. Good when SQUAD speaks as a community, not as infrastructure.</p>
+      </div>
+      <div class="spec-block terracotta">
+        <div class="spec-label">Editorial cover · brand</div>
+        <h4 class="spec-h2" style="font-size:68px">ISSUE 04<br><span class="accent">THE LINEUP</span>.</h4>
+        <p class="spec-body" style="margin-top:20px">Spring 2026. Players, plays, patterns.</p>
+      </div>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><h5 class="num">01</h5><div class="lbl">Family</div></div>
+      <div class="stat"><h5 class="num">02</h5><div class="lbl">Widths</div></div>
+      <div class="stat"><h5 class="num"><span class="accent">∞</span></h5><div class="lbl">Range</div></div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <img src="assets/squad_logomark.png" alt="SQUAD">
+    SQUAD · Type Pairing Studies · Strong Sans · v2 · 2026.05
+  </footer>
+
+</div>
+</body>
+</html>

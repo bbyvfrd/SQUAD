@@ -1,0 +1,440 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>SQUAD — Inter Tight Deep Dive</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@100..900&family=Inter:wght@400;500;700;900&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --terracotta:#EE4721;
+    --terracotta-light:#F26B49;
+    --terracotta-deep:#C5371A;
+    --jet:#13222C;
+    --navy:#1D3444;
+    --slate:#BEC4CE;
+    --slate-deep:#8E96A1;
+    --linen:#EBE7DB;
+    --bone:#F5F2E9;
+    --hairline:rgba(19,34,44,.12);
+    --smoke:#3A4550;
+    --ash:#6B7480;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--linen);color:var(--jet);font-family:'Inter Tight',sans-serif;-webkit-font-smoothing:antialiased}
+  .page{width:1500px;margin:0 auto}
+
+  .mono-label{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;line-height:1.7}
+  .mono-kicker{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;line-height:1.7}
+
+  /* ─── Page chrome ─────────────────────────────────────────── */
+  .meta-row{display:flex;justify-content:space-between;align-items:center;padding:48px 64px 24px;color:var(--ash);font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase}
+  .meta-row .squad{display:flex;align-items:center;gap:12px}
+  .meta-row .squad img{width:28px;height:28px;object-fit:contain}
+
+  .section{padding:120px 64px;border-bottom:1px solid var(--hairline);position:relative}
+  .section-head{display:grid;grid-template-columns:120px 1fr auto;gap:32px;align-items:start;margin-bottom:64px}
+  .section-num{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:68px;line-height:.85;color:var(--terracotta);letter-spacing:-.04em}
+  .section-title{font-family:'Inter Tight',sans-serif;font-weight:800;font-size:34px;letter-spacing:-.02em;color:var(--jet);margin:0;line-height:1.1}
+  .section-stack{margin-top:14px;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--ash);line-height:1.7}
+  .section-side{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--ash);text-align:right;max-width:200px;line-height:1.7}
+
+  /* ─── 00 · COVER ──────────────────────────────────────────── */
+  .intro{padding:0 64px 80px;border-bottom:1px solid var(--hairline)}
+  .intro-eyebrow{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--terracotta);margin-bottom:32px}
+  .intro h1{margin:0;font-family:'Inter Tight',sans-serif;font-weight:900;font-size:296px;line-height:.82;letter-spacing:-.045em;color:var(--jet);text-transform:uppercase}
+  .intro h1 .accent{color:var(--terracotta)}
+  .intro .lede{margin-top:48px;max-width:880px;font-size:24px;line-height:1.5;color:var(--smoke);font-weight:500}
+  .intro .lede strong{color:var(--jet);font-weight:700}
+
+  /* ─── 01 · LOCKUP HARMONY ─────────────────────────────────── */
+  .lockup-row{background:var(--bone);border:1px solid var(--hairline);border-radius:6px;padding:80px 56px;display:grid;grid-template-columns:1fr 1.3fr 1fr;align-items:center;gap:48px}
+  .lock-item{display:flex;flex-direction:column;align-items:center;gap:18px;text-align:center}
+  .logomark-img{height:160px;width:auto;display:block}
+  .lockup-img{height:96px;width:auto;display:block}
+  .lock-typeset{font-weight:900;font-size:160px;line-height:1;letter-spacing:-.045em;color:var(--jet);text-transform:uppercase}
+  .lock-typeset .accent{color:var(--terracotta)}
+
+  /* ─── 02 · WEIGHT LADDER ──────────────────────────────────── */
+  .ladder{display:flex;flex-direction:column;gap:0}
+  .ladder-row{display:grid;grid-template-columns:140px 1fr 200px;align-items:baseline;gap:32px;padding:24px 0;border-bottom:1px solid var(--hairline)}
+  .ladder-row:last-child{border-bottom:none}
+  .ladder-weight{font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--terracotta-deep)}
+  .ladder-word{font-size:96px;letter-spacing:-.035em;line-height:1;color:var(--jet);text-transform:uppercase}
+  .ladder-word .accent{color:var(--terracotta)}
+  .ladder-note{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--ash);text-align:right;line-height:1.7}
+
+  /* ─── 03 · GLYPH SPECIMEN ─────────────────────────────────── */
+  .glyph-block{background:var(--bone);border:1px solid var(--hairline);border-radius:6px;padding:56px;margin-bottom:24px}
+  .glyph-block h3{margin:0 0 24px;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--terracotta-deep)}
+  .glyph-line{font-weight:900;font-size:84px;line-height:1.1;letter-spacing:-.025em;color:var(--jet);text-transform:none}
+  .glyph-line.upper{text-transform:uppercase}
+  .glyph-line .accent{color:var(--terracotta)}
+  .glyph-block.dark{background:var(--jet);border-color:var(--navy)}
+  .glyph-block.dark h3{color:var(--terracotta-light)}
+  .glyph-block.dark .glyph-line{color:var(--linen)}
+
+  /* ─── 04 · TIGHT vs INTER ─────────────────────────────────── */
+  .compare{display:grid;grid-template-columns:1fr 1fr;gap:32px}
+  .compare-card{background:var(--bone);border:1px solid var(--hairline);border-radius:6px;padding:64px 56px;display:flex;flex-direction:column;justify-content:space-between;min-height:420px}
+  .compare-card.alt{background:var(--linen)}
+  .compare-eyebrow{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--ash)}
+  .compare-eyebrow .winner{color:var(--terracotta);font-weight:700}
+  .compare-word{font-weight:900;font-size:144px;line-height:.85;letter-spacing:-.04em;color:var(--jet);text-transform:uppercase;margin:32px 0}
+  .compare-word .accent{color:var(--terracotta)}
+  .compare-it{font-family:'Inter Tight',sans-serif}
+  .compare-r{font-family:'Inter',sans-serif;letter-spacing:-.035em}
+  .compare-foot{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--ash);line-height:1.7}
+
+  /* ─── 05 · BRAND SURFACES ─────────────────────────────────── */
+  .surfaces{display:grid;grid-template-columns:1.4fr 1fr;gap:32px}
+  .surfaces-stack{display:flex;flex-direction:column;gap:32px}
+  .surface{border-radius:6px;overflow:hidden;position:relative}
+  .surface-label{position:absolute;top:24px;left:24px;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:rgba(235,231,219,.85);z-index:5}
+  .surface-label.dark-on-light{color:var(--ash)}
+
+  /* surface: hero */
+  .s-hero{background:var(--jet);color:var(--linen);padding:96px 80px;min-height:620px;display:flex;flex-direction:column;justify-content:space-between;box-shadow:0 2px 6px rgba(0,0,0,.08),0 12px 40px rgba(0,0,0,.08)}
+  .s-hero-kicker{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--terracotta);margin-bottom:32px}
+  .s-hero-display{font-weight:900;font-size:184px;line-height:.82;letter-spacing:-.04em;text-transform:uppercase;margin:0}
+  .s-hero-display .accent{color:var(--terracotta)}
+  .s-hero-sub{margin-top:48px;max-width:65ch;font-size:20px;line-height:1.5;color:#C9CCD2;font-weight:400}
+  .s-hero-sub strong{color:var(--linen);font-weight:700}
+
+  /* surface: game card */
+  .s-card{background:var(--bone);color:var(--jet);padding:32px;min-height:280px;display:flex;flex-direction:column;justify-content:space-between;border:1px solid var(--hairline)}
+  .s-card-meta{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--terracotta-deep);margin-bottom:8px}
+  .s-card-title{font-weight:900;font-size:34px;line-height:1;letter-spacing:-.025em;text-transform:uppercase;margin:0 0 8px}
+  .s-card-venue{font-size:16px;color:var(--smoke);font-weight:400;margin-bottom:24px}
+  .s-card-foot{display:flex;justify-content:space-between;align-items:center}
+  .s-card-spots{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--ash)}
+  .s-card-cta{background:var(--terracotta);color:var(--linen);font-weight:900;font-size:14px;letter-spacing:.06em;text-transform:uppercase;padding:12px 24px;border-radius:4px;border:none}
+
+  /* surface: push notification */
+  .s-push{background:var(--linen);color:var(--jet);padding:24px;border:1px solid var(--hairline);min-height:140px}
+  .s-push-row{display:flex;align-items:center;gap:14px;margin-bottom:12px}
+  .s-push-icon{width:40px;height:40px;background:var(--terracotta);border-radius:9px;display:flex;align-items:center;justify-content:center;font-weight:900;color:var(--linen);font-size:16px;letter-spacing:-.02em}
+  .s-push-meta{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--ash)}
+  .s-push-title{font-weight:900;font-size:18px;line-height:1.15;letter-spacing:-.015em;margin:0 0 4px}
+  .s-push-body{font-size:14px;color:var(--smoke);line-height:1.45;font-weight:400}
+
+  /* surface: score panel */
+  .s-score{background:var(--terracotta);color:var(--linen);padding:48px 40px;min-height:280px;display:flex;flex-direction:column;justify-content:space-between}
+  .s-score-meta{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:rgba(235,231,219,.9)}
+  .s-score-line{font-weight:900;font-size:112px;line-height:.85;letter-spacing:-.04em;text-transform:uppercase;margin:0;display:flex;justify-content:space-between;align-items:baseline}
+  .s-score-line .accent{color:var(--jet)}
+
+  /* surface: OOH */
+  .s-ooh{background:var(--jet);color:var(--linen);padding:64px;min-height:380px;position:relative;overflow:hidden}
+  .s-ooh-mark{position:absolute;right:-60px;top:50%;transform:translateY(-50%);opacity:.06}
+  .s-ooh-mark img{width:520px;height:auto}
+  .s-ooh-kicker{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:rgba(235,231,219,.85);margin-bottom:24px;position:relative}
+  .s-ooh-display{font-weight:900;font-size:128px;line-height:.84;letter-spacing:-.04em;text-transform:uppercase;margin:0;position:relative}
+  .s-ooh-display .accent{color:var(--terracotta)}
+
+  /* surface: editorial pull quote */
+  .s-quote{background:var(--bone);color:var(--jet);padding:56px;min-height:340px;display:flex;flex-direction:column;justify-content:space-between;border:1px solid var(--hairline)}
+  .s-quote-mark{font-weight:900;font-size:120px;line-height:.7;color:var(--terracotta);margin:0}
+  .s-quote-text{font-weight:700;font-size:36px;line-height:1.2;letter-spacing:-.02em;color:var(--jet);margin:24px 0 0}
+  .s-quote-text strong{font-weight:900;color:var(--terracotta-deep)}
+  .s-quote-attr{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--ash);margin-top:24px}
+
+  /* ─── 06 · SYSTEM TABLE ───────────────────────────────────── */
+  .system{display:grid;grid-template-columns:120px 1fr 1.4fr;gap:0;border-top:1px solid var(--hairline)}
+  .system-cell{padding:32px 0;border-bottom:1px solid var(--hairline);font-size:17px;line-height:1.6;color:var(--smoke)}
+  .system-cell.weight{font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--terracotta-deep)}
+  .system-cell.role{font-family:'Inter Tight',sans-serif;font-weight:900;font-size:24px;letter-spacing:-.02em;color:var(--jet);text-transform:uppercase}
+
+  /* ─── 07 · RISK ────────────────────────────────────────────── */
+  .risk{background:var(--jet);color:var(--linen);border-radius:6px;padding:80px 64px}
+  .risk h3{margin:0 0 32px;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--terracotta-light)}
+  .risk-display{font-weight:900;font-size:72px;line-height:.92;letter-spacing:-.025em;text-transform:uppercase;margin:0 0 32px;color:var(--linen)}
+  .risk-display .accent{color:var(--terracotta)}
+  .risk-body{font-size:19px;line-height:1.6;max-width:65ch;color:#C9CCD2;font-weight:400}
+  .risk-body strong{color:var(--linen);font-weight:700}
+  .risk-body + .risk-body{margin-top:20px}
+
+  .footer{padding:80px 64px;text-align:center;color:var(--ash);font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;letter-spacing:.22em;text-transform:uppercase}
+  .footer img{width:36px;height:36px;display:block;margin:0 auto 20px;opacity:.55}
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <header class="meta-row">
+    <div class="squad"><img src="assets/squad_logomark.png" alt="SQUAD"><span>SQUAD &nbsp;/&nbsp; Brand Studies</span></div>
+    <div>Inter Tight · Deep Dive · 2026.05</div>
+  </header>
+
+  <!-- 00 · COVER -->
+  <section class="intro">
+    <div class="intro-eyebrow">Locked Candidate · 02 · Inter Tight</div>
+    <h1>SHARP.<br><span class="accent">FAST.</span><br>BUILT.</h1>
+    <p class="lede">
+      Inter Tight is Inter <strong>with the slack pulled out</strong>. Tighter sidebearings, denser at the same weight, sharper terminals. Variable axis 100&ndash;900. Pan&ndash;language at every weight: <strong>Latin, Latin Extended-A, Cyrillic, Greek, Vietnamese</strong> — one variable font file delivers all of it. This study stress&ndash;tests it on the actual surfaces SQUAD will live on, then locks the system.
+    </p>
+  </section>
+
+  <!-- 01 · LOCKUP HARMONY -->
+  <section class="section">
+    <div class="section-head">
+      <div class="section-num">01</div>
+      <div>
+        <h2 class="section-title">Lockup Harmony</h2>
+        <div class="section-stack">Logomark · Lockup · Inter Tight 900<br>Visual integrity test</div>
+      </div>
+      <div class="section-side">Does the type sit alongside the locked brand mark without fighting it?</div>
+    </div>
+    <div class="lockup-row">
+      <div class="lock-item">
+        <img class="logomark-img" src="assets/squad_logomark.png" alt="SQUAD logomark">
+        <div class="mono-label">LOGOMARK · LOCKED</div>
+      </div>
+      <div class="lock-item">
+        <img class="lockup-img" src="assets/squad_logo_transparent_2.png" alt="SQUAD horizontal lockup">
+        <div class="mono-label">HORIZONTAL LOCKUP · LOCKED</div>
+      </div>
+      <div class="lock-item">
+        <div class="lock-typeset">SQU<span class="accent">A</span>D</div>
+        <div class="mono-label">TYPESET · INTER TIGHT 900</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 · WEIGHT LADDER -->
+  <section class="section">
+    <div class="section-head">
+      <div class="section-num">02</div>
+      <div>
+        <h2 class="section-title">Weight Ladder</h2>
+        <div class="section-stack">Variable axis · 100 → 900<br>Same word, every weight</div>
+      </div>
+      <div class="section-side">Each weight earns its place by carrying a specific brand role. No slack steps.</div>
+    </div>
+    <div class="ladder">
+      <div class="ladder-row">
+        <div class="ladder-weight">100 / Thin</div>
+        <div class="ladder-word" style="font-weight:100">SQU<span class="accent">A</span>D</div>
+        <div class="ladder-note">Not used in brand</div>
+      </div>
+      <div class="ladder-row">
+        <div class="ladder-weight">300 / Light</div>
+        <div class="ladder-word" style="font-weight:300">SQU<span class="accent">A</span>D</div>
+        <div class="ladder-note">Not used in brand</div>
+      </div>
+      <div class="ladder-row">
+        <div class="ladder-weight">400 / Regular</div>
+        <div class="ladder-word" style="font-weight:400">SQU<span class="accent">A</span>D</div>
+        <div class="ladder-note">Body copy<br>17px / 1.6</div>
+      </div>
+      <div class="ladder-row">
+        <div class="ladder-weight">500 / Medium</div>
+        <div class="ladder-word" style="font-weight:500">SQU<span class="accent">A</span>D</div>
+        <div class="ladder-note">Lede + emphasis<br>22-24px</div>
+      </div>
+      <div class="ladder-row">
+        <div class="ladder-weight">700 / Bold</div>
+        <div class="ladder-word" style="font-weight:700">SQU<span class="accent">A</span>D</div>
+        <div class="ladder-note">Strong inline<br>Card titles 18-22px</div>
+      </div>
+      <div class="ladder-row">
+        <div class="ladder-weight">800 / Extrabold</div>
+        <div class="ladder-word" style="font-weight:800">SQU<span class="accent">A</span>D</div>
+        <div class="ladder-note">Section titles 32-48px<br>Sub-display</div>
+      </div>
+      <div class="ladder-row">
+        <div class="ladder-weight">900 / Black</div>
+        <div class="ladder-word" style="font-weight:900">SQU<span class="accent">A</span>D</div>
+        <div class="ladder-note">Display tier<br>Hero + brand surfaces</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 · GLYPH SPECIMEN -->
+  <section class="section">
+    <div class="section-head">
+      <div class="section-num">03</div>
+      <div>
+        <h2 class="section-title">Glyph Specimen</h2>
+        <div class="section-stack">Black / 900<br>EN · AZ · RU · diacritics</div>
+      </div>
+      <div class="section-side">If any glyph falls back, this is where it shows up first. Test at the heaviest weight.</div>
+    </div>
+    <div class="glyph-block">
+      <h3>Latin Uppercase · 900</h3>
+      <div class="glyph-line upper" style="font-weight:900">ABCDEFGHIJKLMN<span class="accent">OPQRSTUVWXYZ</span></div>
+    </div>
+    <div class="glyph-block">
+      <h3>Latin Lowercase · 900</h3>
+      <div class="glyph-line" style="font-weight:900">abcdefghijklmn<span class="accent">opqrstuvwxyz</span></div>
+    </div>
+    <div class="glyph-block">
+      <h3>Azerbaijani Specials · 900 · The Trilingual Test Glyphs</h3>
+      <div class="glyph-line upper" style="font-weight:900">Ə Ç Ğ <span class="accent">İ</span> I Ö Ş Ü &nbsp; ə ç ğ <span class="accent">i</span> ı ö ş ü</div>
+    </div>
+    <div class="glyph-block dark">
+      <h3>Cyrillic · 900</h3>
+      <div class="glyph-line upper" style="font-weight:900">АБВГДЕЁЖЗИЙКЛМН<span class="accent">ОПРСТУФХЦЧШЩЪЫЬЭЮЯ</span></div>
+    </div>
+    <div class="glyph-block">
+      <h3>Numerals + Punctuation · Tabular for Scores · 900</h3>
+      <div class="glyph-line" style="font-weight:900;font-variant-numeric:tabular-nums">0 1 2 3 4 5 6 7 8 9 &nbsp; <span class="accent">: . , ; / × +</span></div>
+    </div>
+  </section>
+
+  <!-- 04 · TIGHT vs INTER -->
+  <section class="section">
+    <div class="section-head">
+      <div class="section-num">04</div>
+      <div>
+        <h2 class="section-title">Tight vs Regular</h2>
+        <div class="section-stack">Inter Tight 900 vs Inter 900<br>Same word, same size</div>
+      </div>
+      <div class="section-side">What the tighter sidebearings actually buy on a real headline.</div>
+    </div>
+    <div class="compare">
+      <div class="compare-card alt">
+        <div class="compare-eyebrow">SQUAD'S PICK · <span class="winner">INTER TIGHT 900</span></div>
+        <div class="compare-word compare-it">PR<span class="accent">E</span>SS</div>
+        <div class="compare-foot">Sidebearings tightened<br>Caps fit closer · Reads as <strong>denser, sharper, more intentional</strong></div>
+      </div>
+      <div class="compare-card">
+        <div class="compare-eyebrow">REFERENCE · INTER 900</div>
+        <div class="compare-word compare-r">PRESS</div>
+        <div class="compare-foot">Default Inter spacing<br>Reads as the standard SaaS sans · <strong>too generic</strong> for a brand at this scale</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 05 · BRAND SURFACES -->
+  <section class="section">
+    <div class="section-head">
+      <div class="section-num">05</div>
+      <div>
+        <h2 class="section-title">Brand Surfaces</h2>
+        <div class="section-stack">Hero · game card · push · score · OOH · pull quote<br>Real contexts, real copy</div>
+      </div>
+      <div class="section-side">If the family carries every surface here, it carries the brand.</div>
+    </div>
+
+    <div class="surfaces">
+      <div class="surface s-hero">
+        <div class="surface-label">SURFACE 01 · WEB HERO</div>
+        <div>
+          <div class="s-hero-kicker">FIND · ORGANIZE · PLAY</div>
+          <h2 class="s-hero-display">FIND<br>YOUR<br><span class="accent">GAME.</span></h2>
+        </div>
+        <p class="s-hero-sub">The single place for recreational sports. Players find games. Organizers run them. Venues get discovered. <strong>Reliability built in.</strong></p>
+      </div>
+
+      <div class="surfaces-stack">
+        <div class="surface s-card">
+          <div>
+            <div class="s-card-meta">SAT · 14:00 · 5V5</div>
+            <h3 class="s-card-title">Pickup at<br>Court 7.</h3>
+            <div class="s-card-venue">Sahil Park · Indoor</div>
+          </div>
+          <div class="s-card-foot">
+            <span class="s-card-spots">2 SPOTS LEFT</span>
+            <button class="s-card-cta">Join</button>
+          </div>
+        </div>
+
+        <div class="surface s-push">
+          <div class="s-push-row">
+            <div class="s-push-icon">S</div>
+            <div class="s-push-meta">SQUAD · NOW</div>
+          </div>
+          <h4 class="s-push-title">Game in 1 hour. Court 2.</h4>
+          <p class="s-push-body">Bring dark kit. Confirmed: 9 of 10. <strong>You're in.</strong></p>
+        </div>
+
+        <div class="surface s-score">
+          <div class="s-score-meta">FT · HOME · 24.04</div>
+          <h3 class="s-score-line"><span>SQD</span><span class="accent">3</span></h3>
+          <h3 class="s-score-line"><span>OPP</span><span class="accent">1</span></h3>
+        </div>
+      </div>
+    </div>
+
+    <div class="surfaces" style="margin-top:32px">
+      <div class="surface s-ooh">
+        <div class="s-ooh-mark"><img src="assets/squad_logomark.png" alt=""></div>
+        <div class="s-ooh-kicker">OUT OF HOME · BAKU · MOSCOW · ISTANBUL</div>
+        <h2 class="s-ooh-display">SHOW UP.<br><span class="accent">PLAY TODAY.</span></h2>
+      </div>
+
+      <div class="surface s-quote">
+        <div>
+          <span class="surface-label dark-on-light">EDITORIAL · PULL QUOTE</span>
+          <div class="s-quote-mark">"</div>
+          <p class="s-quote-text">A SQUAD <strong>holds</strong>. It moves <strong>together</strong>. It does not flake on game day.</p>
+        </div>
+        <div class="s-quote-attr">— SQUAD MANIFESTO · 02</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 06 · THE SYSTEM -->
+  <section class="section">
+    <div class="section-head">
+      <div class="section-num">06</div>
+      <div>
+        <h2 class="section-title">The System</h2>
+        <div class="section-stack">One display family · One mono · No body family<br>Inter Tight carries body too</div>
+      </div>
+      <div class="section-side">Two fonts total. Inter Tight is body-readable at 400, so a single-family system is honest here.</div>
+    </div>
+
+    <div class="system">
+      <div class="system-cell weight">100 / 300</div>
+      <div class="system-cell role">Reserved</div>
+      <div class="system-cell">Not in active use. Available for future low-emphasis chrome (legal text, watermarks). Loading is free with the variable file.</div>
+
+      <div class="system-cell weight">400 · Regular</div>
+      <div class="system-cell role">Body</div>
+      <div class="system-cell">17px standard body copy. 65–75ch line length. Color: Body Smoke <code>#3A4550</code> on linen, Slate <code>#BEC4CE</code> on jet.</div>
+
+      <div class="system-cell weight">500 · Medium</div>
+      <div class="system-cell role">Lede + Emphasis</div>
+      <div class="system-cell">22–24px lede paragraphs. Inline emphasis where bold would be too loud. Push notification body copy.</div>
+
+      <div class="system-cell weight">700 · Bold</div>
+      <div class="system-cell role">Inline Strong + Card Titles</div>
+      <div class="system-cell">Inline <code>&lt;strong&gt;</code> for body emphasis. Card titles 18–24px. Stat labels in jet on linen.</div>
+
+      <div class="system-cell weight">800 · Extrabold</div>
+      <div class="system-cell role">Section + Sub-Display</div>
+      <div class="system-cell">Section titles 34–48px. Reserved for second-tier headlines that need presence without going to display weight.</div>
+
+      <div class="system-cell weight">900 · Black</div>
+      <div class="system-cell role">Display</div>
+      <div class="system-cell">96px–296px headlines. Hero, OOH, score panels, marquee moments. The brand's loud voice. Letter-spacing -0.04em locked.</div>
+
+      <div class="system-cell weight">JetBrains Mono</div>
+      <div class="system-cell role">Label + Kicker</div>
+      <div class="system-cell">11px / 500 / 0.16em (label) and 12px / 600 / 0.22em (kicker). Tactical metadata, eyebrows, badges, score timestamps.</div>
+    </div>
+  </section>
+
+  <!-- 07 · RISK -->
+  <section class="section">
+    <div class="risk">
+      <h3>Risk Note · The Reflex Trap</h3>
+      <h2 class="risk-display">Inter is the AI&nbsp;default.<br>Inter Tight is <span class="accent">not</span>.</h2>
+      <p class="risk-body">Inter is the most over-used sans of the last decade. Every SaaS landing page, every dashboard, every "modern" startup. PRODUCT.md explicitly rejects looking generic. So the question is fair: does choosing Inter Tight just rebrand the reflex?</p>
+      <p class="risk-body"><strong>The answer is: only if you use it like SaaS uses it.</strong> SaaS uses Inter at 400–600 weight, large line-height, generous letter-spacing, on white. SQUAD's commitment is the opposite of that: <strong>Inter Tight at 900</strong> with <strong>negative letter-spacing</strong>, on warm linen or jet, with the terracotta color spike. Same family, different brand. The tightness, the weight, the spike, and the warmth of the color system together pull Inter Tight out of SaaS reflex territory.</p>
+      <p class="risk-body">If at any point a SQUAD surface starts to feel like a Linear or Notion screen, the cause will be <strong>not enough weight</strong>, <strong>not enough scale</strong>, or <strong>linen drifted toward white</strong>. Catch those, and the family stays in SQUAD's hands.</p>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <img src="assets/squad_logomark.png" alt="SQUAD">
+    SQUAD · Inter Tight Deep Dive · 2026.05
+  </footer>
+
+</div>
+</body>
+</html>
